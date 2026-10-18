@@ -2,6 +2,12 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: [SemVer](https://semver.org/lang/es/).
 
+## [0.10.0] - 2026-10-18
+
+### Agregado
+- **Pruebas contra el OpenCode real** (`pruebas/opencode_real.py`): instala el kit en un proyecto temporal y comprueba con `opencode debug config` y `opencode debug skill` que OpenCode carga los ocho comandos con su agente, los tres agentes con su modelo y modo, los permisos (preguntar antes de `git push`, revisor sin edición) y las seis skills. No gasta tokens.
+- **CI del kit** (`.github/workflows/kit.yml`): las pruebas en Linux y macOS con Python 3.9 y 3.13, las pruebas contra OpenCode real, `shellcheck` de los scripts y una corrida semanal para enterarse si una versión nueva de OpenCode deja de leer el kit.
+
 ## [0.9.0] - 2026-10-18
 
 ### Agregado

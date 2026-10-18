@@ -64,13 +64,16 @@ Para actualizar, en la carpeta del proyecto: `bowser update` (o `/bowser-update`
 
 ## Estado
 
-Versión 0.9.0: fases 0, 1 y 3 del plan: el ciclo de una funcionalidad, la memoria, los principios, los estándares por tecnología y de documentación, los controles que no dependen del agente, `/bowser-idea` para empezar desde una idea y `/bowser-roadmap` para ver el estado y replanear. Las seis skills vienen de `bowser-spec-kit-ai` y siguen sin probarse en un proyecto real. Pendiente: `/bowser-discover` (proyectos existentes). Ver `PLAN.md` y `GUIA.md`.
+Versión 0.10.0: fases 0, 1 y 3 del plan: el ciclo de una funcionalidad, la memoria, los principios, los estándares por tecnología y de documentación, los controles que no dependen del agente, `/bowser-idea` para empezar desde una idea y `/bowser-roadmap` para ver el estado y replanear. Las seis skills vienen de `bowser-spec-kit-ai` y siguen sin probarse en un proyecto real. Pendiente: `/bowser-discover` (proyectos existentes). Ver `PLAN.md` y `GUIA.md`.
 
 ## Pruebas del kit
 
 ```bash
-python3 pruebas/prueba.py
+python3 pruebas/prueba.py         # todo el kit, con OpenCode simulado
+python3 pruebas/opencode_real.py  # contra el OpenCode instalado: qué comandos, agentes, permisos y skills carga (no gasta tokens)
 ```
+
+El CI (`.github/workflows/kit.yml`) corre las dos en cada push y pull request, en Linux y macOS, y cada lunes contra la última versión de OpenCode. Para probar otra versión: *Actions → Kit → Run workflow* con la versión de `opencode-ai`.
 
 ## Licencia
 

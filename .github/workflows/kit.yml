@@ -1,0 +1,56 @@
+name: Kit
+
+# Pruebas del propio kit (no del proyecto donde se instala: ese workflow es plantilla/github/bowser.yml).
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 9 * * 1"   # cada lunes: avisa si una versión nueva de OpenCode deja de leer el kit
+  workflow_dispatch:
+    inputs:
+      opencode:
+        description: "Versión de OpenCode a probar (npm opencode-ai), por ejemplo 1.18.35"
+        required: false
+        default: ""
+
+jobs:
+  pruebas:
+    name: Pruebas (${{ matrix.os }}, Python ${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python: ["3.9", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: git config --global user.email ci@example.com && git config --global user.name CI
+      - run: python3 pruebas/prueba.py
+
+  opencode:
+    name: OpenCode real (${{ matrix.opencode }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        opencode: ["latest"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Instalar OpenCode
+        run: npm install -g "opencode-ai@${{ github.event.inputs.opencode || matrix.opencode }}"
+      - run: git config --global user.email ci@example.com && git config --global user.name CI
+      - run: python3 pruebas/opencode_real.py
+
+  scripts:
+    name: Scripts de shell
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: shellcheck install.sh plantilla/.githooks/*
