@@ -138,7 +138,7 @@ bowser update --verificar   # qué cambiaría, sin tocar nada
 bowser update               # baja la última versión del kit y actualiza este proyecto
 ```
 
-O, dentro de OpenCode, `/bowser-update`, que hace lo mismo y además el commit. Muestra el CHANGELOG entre tu versión y la nueva, y respeta los archivos del kit que editaste: no los toca y, si el kit trae cambios en uno de ellos, te dice cómo verlos (`diff -u …`) para que los pases a mano. `--forzar` los reemplaza y deja tu versión en `.bowser/respaldo/`, pero **borra lo que habías cambiado**: úsalo solo si después vas a volver a aplicarlo. Después, **cierra OpenCode y vuelve a abrirlo**.
+O, dentro de OpenCode, `/bowser-update`, que hace lo mismo y además el commit. Muestra el CHANGELOG entre tu versión y la nueva, y respeta los archivos del kit que editaste: no los toca y, si el kit trae cambios en uno de ellos, te dice cómo verlos (`diff -u …`) para que los pases a mano. `--forzar` los reemplaza y deja tu versión en `.bowser/respaldo/`, pero **borra lo que habías cambiado**: úsalo solo si después vas a volver a aplicarlo. Después, **cierra OpenCode y vuelve a abrirlo** (con OpenCode 2, corre antes `opencode reload`).
 
 | Opción de `bowser update` | Para… |
 |---|---|

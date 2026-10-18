@@ -29,7 +29,8 @@ def caso(nombre: str, condicion: bool, detalle: object = "") -> None:
         FALLOS.append(nombre)
 
 
-def opencode_json(proyecto: Path, *args: str):
+def opencode_json(proyecto: Path, *args: str, tipo: type = dict):
+    """El primer valor JSON del tipo esperado en la salida (algunas versiones escriben otras líneas antes)."""
     # A un archivo: algunas versiones cortan el JSON grande cuando escriben a una tubería.
     with tempfile.TemporaryFile("w+", encoding="utf-8") as salida:
         r = subprocess.run(["opencode", *args], cwd=proyecto, stdout=salida, stderr=subprocess.PIPE, text=True, timeout=180)
@@ -37,8 +38,16 @@ def opencode_json(proyecto: Path, *args: str):
         texto = salida.read()
     if r.returncode != 0:
         raise RuntimeError(f"opencode {' '.join(args)} falló: {r.stderr.strip()[:300]}")
-    inicio = min(i for i in (texto.find("{"), texto.find("[")) if i >= 0)
-    return json.loads(texto[inicio:])
+    decodificador = json.JSONDecoder()
+    for i, c in enumerate(texto):
+        if c in "{[":
+            try:
+                valor, _ = decodificador.raw_decode(texto, i)
+            except ValueError:
+                continue
+            if isinstance(valor, tipo):
+                return valor
+    raise ValueError(f"opencode {' '.join(args)} no devolvió un JSON {tipo.__name__}. Empieza así: {texto[:400]!r}")
 
 
 def frontmatter(ruta: Path) -> dict[str, str]:
@@ -69,6 +78,8 @@ def main() -> int:
         r = subprocess.run([sys.executable, str(KIT / "bin/bowser"), "init", "--skills", ",".join(skills)], cwd=p,
                            capture_output=True, text=True)
         caso("bowser init instala el kit", r.returncode == 0, r.stderr)
+        if mayor(version) >= 2:
+            return opencode_2(p, version, comandos, agentes, skills)
         try:
             cfg = opencode_json(p, "debug", "config")
         except (RuntimeError, ValueError) as e:
@@ -104,19 +115,76 @@ def main() -> int:
 
         print("Skills")
         try:
-            vistas = {s.get("name") for s in opencode_json(p, "debug", "skill")}
+            vistas = {s.get("name") for s in opencode_json(p, "debug", "skill", tipo=list) if isinstance(s, dict)}
         except (RuntimeError, ValueError) as e:
             caso("OpenCode lista las skills", False, e)
             vistas = set()
         for nombre in skills:
             caso(f"la skill {nombre} está disponible", nombre in vistas, sorted(vistas))
 
+    return resultado(version)
+
+
+def resultado(version: str, sin_comprobar: list[str] | None = None) -> int:
     print()
     if FALLOS:
         print(f"✗ {len(FALLOS)} pruebas fallaron con OpenCode {version}: " + "; ".join(FALLOS))
         return 1
     print(f"✓ OpenCode {version} carga el kit como se espera.")
+    if sin_comprobar:
+        print("  Sin comprobar en esta versión (no hay forma de preguntárselo sin abrir la interfaz): " + ", ".join(sin_comprobar) + ".")
     return 0
+
+
+def mayor(version: str) -> int:
+    m = re.search(r"(\d+)\.\d+", version)
+    return int(m.group(1)) if m else 0
+
+
+def permiso(agente: dict, accion: str, recurso: str) -> str | None:
+    """El efecto de la última regla de OpenCode 2 para esa acción y ese patrón (la última manda)."""
+    efecto = None
+    for regla in agente.get("permissions") or []:
+        if regla.get("action") == accion and regla.get("resource") == recurso:
+            efecto = regla.get("effect")
+    return efecto
+
+
+def opencode_2(p: Path, version: str, comandos: dict, agentes: dict, skills: list[str]) -> int:
+    """OpenCode 2.x: `debug config` lista de dónde lee la configuración y `debug agents` los agentes cargados.
+    No tiene forma de listar comandos ni skills desde la terminal."""
+    try:
+        fuentes = opencode_json(p, "debug", "config", tipo=list)
+    except (RuntimeError, ValueError) as e:
+        caso("OpenCode acepta la configuración del kit", False, e)
+        return 1
+    caso("OpenCode acepta la configuración del kit", True)
+    rutas = {Path(f.get("path", "")).resolve() for f in fuentes if isinstance(f, dict)}
+    caso("OpenCode lee la carpeta .opencode del proyecto", (p / ".opencode").resolve() in rutas, sorted(map(str, rutas)))
+    proyecto = next((f.get("info") or {} for f in fuentes if isinstance(f, dict)
+                     and Path(f.get("path", "")).resolve() == (p / "opencode.json").resolve()), {})
+    caso("el agente por defecto es constructor", proyecto.get("default_agent") == "constructor", proyecto.get("default_agent"))
+
+    print("Agentes")
+    # OpenCode 2 responde desde un servicio de fondo que no lee los agentes de una carpeta nueva hasta `opencode reload`.
+    subprocess.run(["opencode", "reload"], cwd=p, capture_output=True, text=True, timeout=60)
+    try:
+        cargados = {a.get("id"): a for a in opencode_json(p, "debug", "agents", tipo=list) if isinstance(a, dict)}
+    except (RuntimeError, ValueError) as e:
+        caso("OpenCode lista los agentes", False, e)
+        cargados = {}
+    for nombre, archivo in sorted(agentes.items()):
+        fm = frontmatter(archivo)
+        a = cargados.get(nombre) or {}
+        modelo = a.get("model") or {}
+        caso(f"@{nombre} está disponible", bool(a), sorted(k for k in cargados if k))
+        caso(f"@{nombre} usa {fm.get('model')}", f"{modelo.get('providerID')}/{modelo.get('id')}" == fm.get("model"), modelo)
+        caso(f"@{nombre} es {fm.get('mode')}", a.get("mode") == fm.get("mode"), a.get("mode"))
+    constructor, revisor = cargados.get("constructor") or {}, cargados.get("revisor") or {}
+    caso("el constructor pregunta antes de git push", permiso(constructor, "shell", "git push*") == "ask", permiso(constructor, "shell", "git push*"))
+    caso("el constructor corre comandos sin preguntar", permiso(constructor, "shell", "*") == "allow", permiso(constructor, "shell", "*"))
+    caso("el revisor no puede editar", permiso(revisor, "edit", "*") == "deny", permiso(revisor, "edit", "*"))
+    return resultado(version, ["los comandos /bowser-*", "las skills"])
 
 
 if __name__ == "__main__":

@@ -151,7 +151,8 @@ def cmd_update(a: argparse.Namespace) -> int:
     print(f"\nProyecto: {pv} → {version_de(KIT)}")
     codigo = instalar(KIT, proyecto, (["--verificar"] if a.verificar else []) + (["--forzar"] if a.forzar else []))
     if codigo == 0 and not a.verificar:
-        print("\nCierra OpenCode y vuelve a abrirlo en el proyecto: solo lee los comandos y agentes al arrancar.")
+        print("\nCierra OpenCode y vuelve a abrirlo en el proyecto: solo lee los comandos y agentes al arrancar."
+              "\nCon OpenCode 2, además: opencode reload (su servicio de fondo sigue con la configuración de antes).")
     return codigo
 
 

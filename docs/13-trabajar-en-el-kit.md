@@ -29,7 +29,7 @@ python3 pruebas/prueba.py         # todo el kit, con OpenCode simulado: instalac
 python3 pruebas/opencode_real.py  # contra el OpenCode del PATH: comandos, agentes, permisos y skills (no gasta tokens)
 ```
 
-`opencode_real.py` instala el kit en un proyecto temporal y le pregunta a OpenCode qué cargó (`opencode debug config` y `opencode debug skill`). Sirve para saber, sin abrir la interfaz, si una versión nueva de OpenCode sigue leyendo el kit.
+`opencode_real.py` instala el kit en un proyecto temporal y le pregunta a OpenCode qué cargó (`opencode debug config` y `opencode debug skill`). Sirve para saber, sin abrir la interfaz, si una versión nueva de OpenCode sigue leyendo el kit. En OpenCode 2 usa `debug config` y `debug agents`; esa versión no tiene cómo listar comandos ni skills desde la terminal, así que esas dos cosas solo se comprueban abriendo OpenCode.
 
 El CI corre las dos en cada push y pull request, en Linux y macOS con Python 3.9 y 3.13, más `shellcheck` de los scripts, contra la última versión de OpenCode en npm y contra OpenCode 2.0.32 con el instalador oficial, y cada lunes otra vez, para enterarse si una versión nueva deja de leer el kit. Para probar otra: *Actions → Kit → Run workflow* con la versión de `opencode-ai`.
 

@@ -2,6 +2,12 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: [SemVer](https://semver.org/lang/es/).
 
+## [0.12.3] - 2026-10-18
+
+### Corregido
+- `pruebas/opencode_real.py` funciona con OpenCode 2: lee `debug config` (que en la 2.x lista de dónde sale la configuración) y `debug agents`, con los permisos en su formato nuevo (`shell` en vez de `bash`). Comprueba que OpenCode 2 lee la carpeta `.opencode`, el agente por defecto y los tres agentes con su modelo, modo y permisos. Los comandos y las skills no se pueden listar desde la terminal en la 2.x: la prueba lo dice en vez de fallar.
+- **Con OpenCode 2, después de instalar o actualizar el kit hay que correr `opencode reload`**: su servicio de fondo sigue con la configuración de antes aunque se cierre la ventana, y no ve los comandos ni agentes nuevos. `bowser update`, `/bowser-update` y la documentación lo dicen.
+
 ## [0.12.2] - 2026-10-18
 
 ### Corregido

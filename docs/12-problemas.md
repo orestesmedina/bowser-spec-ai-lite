@@ -12,7 +12,7 @@
 
 ### No aparece un comando
 
-OpenCode solo lee comandos y agentes **al arrancar**. Después de instalar o actualizar el kit, ciérralo del todo y vuelve a abrirlo en la carpeta del proyecto.
+OpenCode solo lee comandos y agentes **al arrancar**. Después de instalar o actualizar el kit, ciérralo del todo y vuelve a abrirlo en la carpeta del proyecto. **Con OpenCode 2**, antes de abrirlo corre `opencode reload`: su servicio de fondo sigue corriendo con la configuración de antes aunque cierres la ventana.
 
 Si sigue sin aparecer:
 

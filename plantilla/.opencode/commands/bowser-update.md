@@ -20,4 +20,4 @@ Notas de la persona (puede venir vacío): $ARGUMENTS
    `.bowser/versiones`). Después revisa si `docs/memoria/` (sobre todo `deuda.md` y `decisiones.md`) dependía de lo que
    cambió.
 4. Si hubo cambios, haz commit: `chore: actualiza bowser-ai-lite a <versión>`. Si estás en una rama de funcionalidad a medias, pregunta antes: la actualización va en la rama principal.
-5. Recuérdale que **cierre OpenCode y lo vuelva a abrir**: los comandos y agentes nuevos solo se cargan al arrancar.
+5. Recuérdale que **cierre OpenCode y lo vuelva a abrir**: los comandos y agentes nuevos solo se cargan al arrancar. Con OpenCode 2 (`opencode --version`), antes de abrirlo: `opencode reload`, porque su servicio de fondo sigue con la configuración de antes.
