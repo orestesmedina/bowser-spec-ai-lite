@@ -56,7 +56,9 @@ jobs:
       - name: Instalar OpenCode (instalador oficial)
         if: matrix.instalador == 'oficial'
         run: |
-          curl -fsSL https://opencode.ai/install | bash -s -- --version "${{ matrix.opencode }}"
+          # OpenCode 1 y 2 tienen instaladores distintos.
+          case "${{ matrix.opencode }}" in 1.*) url=https://opencode.ai/install ;; *) url=https://opencode.ai/v2/install ;; esac
+          curl -fsSL "$url" | bash -s -- --version "${{ matrix.opencode }}"
           echo "$HOME/.opencode/bin" >> "$GITHUB_PATH"
       - name: Comprobar la versión instalada
         if: matrix.instalador == 'oficial'

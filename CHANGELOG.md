@@ -2,6 +2,11 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: [SemVer](https://semver.org/lang/es/).
 
+## [0.12.2] - 2026-10-18
+
+### Corregido
+- CI del kit: OpenCode 2 se instala con su propio instalador (`opencode.ai/v2/install`); el de OpenCode 1 lo rechaza.
+
 ## [0.12.1] - 2026-10-18
 
 ### Corregido
