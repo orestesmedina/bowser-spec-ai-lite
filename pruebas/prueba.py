@@ -416,6 +416,37 @@ def prueba_verificacion(base: Path) -> None:
     caso("el CI corre make check y la verificación de la rama", "run: make check" in ci and "verificar.py --ci" in ci)
 
 
+def prueba_wiki(base: Path) -> None:
+    print("Documentación del kit (docs/)")
+    import re
+    sys.path.insert(0, str(KIT))
+    import instalar as kit
+
+    def ancla(titulo: str) -> str:
+        return re.sub(r"[^\w\- ]", "", titulo.strip().lower()).replace(" ", "-")
+
+    paginas = sorted((KIT / "docs").glob("*.md")) + [KIT / "README.md", KIT / "GUIA.md"]
+    anclas = {}
+    for f in paginas:
+        sin_codigo = re.sub(r"```.*?```", "", f.read_text(encoding="utf-8"), flags=re.S)
+        anclas[f.resolve()] = (sin_codigo, {ancla(h) for h in re.findall(r"^#+ (.+)$", sin_codigo, re.M)})
+    rotos = []
+    for f, (texto, _) in anclas.items():
+        for enlace in re.findall(r"\]\(([^)\s]+)\)", texto):
+            if enlace.startswith(("http://", "https://")):
+                continue
+            ruta, _, a = enlace.partition("#")
+            destino = (f.parent / ruta).resolve() if ruta else f
+            if not destino.exists() or (a and destino in anclas and a not in anclas[destino][1]):
+                rotos.append(f"{f.name}: {enlace}")
+    caso("los enlaces de la documentación llevan a una página y sección que existen", not rotos, "; ".join(rotos))
+    comandos = (KIT / "docs/05-comandos.md").read_text(encoding="utf-8")
+    inicio = (KIT / "docs/README.md").read_text(encoding="utf-8")
+    faltan = [Path(r).stem for r in kit.DEL_KIT if r.startswith(".opencode/commands/")
+              and (f"## /{Path(r).stem}" not in comandos or f"`/{Path(r).stem}`" not in inicio)]
+    caso("cada comando tiene su sección en Comandos y su línea en el inicio", not faltan, faltan)
+
+
 def prueba_distribucion(base: Path) -> None:
     print("Distribución: install.sh, bowser init y bowser update")
     import shutil
@@ -494,6 +525,7 @@ def main() -> int:
         prueba_costo(base)
         prueba_verificacion(base)
         prueba_distribucion(base)
+        prueba_wiki(base)
     print()
     if FALLOS:
         print(f"✗ {len(FALLOS)} pruebas fallaron: " + "; ".join(FALLOS))

@@ -1,6 +1,6 @@
 # Roadmap
 
-<!-- Funcionalidades en orden. Estado: pendiente, en curso, en revisión, terminada, pausada.
+<!-- Funcionalidades en orden. Estado: pendiente, en curso, en revisión, terminada, pausada o descartada.
      La primera funcionalidad de un proyecto nuevo es siempre la base mínima que funciona.
      Requisitos: los RF de docs/producto/requerimientos.md que cubre cada funcionalidad. -->
 

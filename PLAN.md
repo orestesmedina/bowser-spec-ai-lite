@@ -151,3 +151,28 @@ Va primero la fase 1 (el ciclo) porque las dos puertas dependen de ella, y porqu
 - **Una persona que no programa aprobando cambios riesgosos.** Se mitiga con evidencia (app funcionando) y con el revisor, pero no se elimina: en pagos, datos personales y seguridad conviene una segunda persona técnica.
 - **Ingeniería inversa equivocada.** El agente puede describir mal un módulo. Por eso existe el paso 5 (levantarlo y explicar un flujo) y las pruebas de caracterización antes de cambiar nada.
 - **Volver a construir el kit en vez de los productos.** La regla: ninguna pieza nueva sin haberla necesitado tres veces en un proyecto real.
+
+## 12. La prueba de la fase 1
+
+**Objetivo:** saber si el kit nuevo hace una funcionalidad más barata, más rápida y con menos retrabajo que el anterior. La referencia: la primera funcionalidad de `simiente-santa-webside` costó **115 M tokens**, con ~110 000 tokens por respuesta del orquestador.
+
+**Dónde:** una copia nueva y aislada de `simiente-santa-webside`. Lo aprendido el 2026-10-10 sigue valiendo:
+- Sin remoto (`git remote remove origin`): un push no puede tocar el proyecto real.
+- Con un `.env` de proyecto de Compose y puertos propios, y **con los contenedores reales apagados** mientras pruebas (las pruebas de integración vacían tablas y, sin `DATABASE_URL`, el código usa `localhost:5432`).
+
+**Qué hacer:**
+1. Pasar la copia al kit nuevo ([docs/02-instalar.md](docs/02-instalar.md#en-un-proyecto-con-el-kit-anterior)) y completar `AGENTS.md`, `Makefile` y la memoria inicial.
+2. Hacer **tres funcionalidades pequeñas o normales** del roadmap, cada una en **una sesión nueva** de OpenCode: `/bowser-feature …`, aprobar cuando corresponda, `/bowser-close`.
+3. Una buena candidata es la deuda S1 de la funcionalidad 002: que la base de datos rechace modificar o borrar filas de `login_events` y `admin_actions`, con su prueba de integración.
+
+**Qué anotar de cada una** (la línea de `docs/producto/historial.md` cubre casi todo):
+
+| Dato | De dónde sale |
+|---|---|
+| Tokens y costo equivalente | `make cost` (lo pone `/bowser-close`) |
+| Vueltas de revisión | `/bowser-close` |
+| Minutos tuyos (leer, aprobar, corregir) | Tu reloj; anótalo en "Notas" |
+| ¿Funcionó a la primera al probarlo tú? | Tú; en "Notas" |
+| ¿El agente se equivocó por no saber algo que estaba, o debía estar, en la memoria? | Tú; en "Notas" |
+
+Con esas tres líneas se decide qué ajustar antes de probar `/bowser-discover` en un proyecto existente (fase 2).

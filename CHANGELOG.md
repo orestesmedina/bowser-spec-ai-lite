@@ -2,6 +2,16 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: [SemVer](https://semver.org/lang/es/).
 
+## [0.11.1] - 2026-10-18
+
+### Agregado
+- **Documentación para cualquier persona** en [`docs/`](docs/README.md), en trece páginas: qué es y cómo piensa el kit, instalar (proyecto nuevo, existente o con el kit anterior), qué comando usar en cada situación, un día de trabajo de punta a punta, la referencia de cada comando, agentes, memoria, controles, skills, costo, archivos que instala, problemas frecuentes y cómo trabajar en el kit.
+- Las pruebas del kit comprueban que los enlaces de la documentación funcionan y que cada comando tiene su página.
+
+### Cambiado
+- `GUIA.md` ahora dice dónde quedó cada sección. La prueba de la fase 1 pasó a `PLAN.md`.
+- Los mensajes del instalador enlazan a la documentación y, al terminar de instalar, sugieren `/bowser-idea` o `/bowser-discover`.
+
 ## [0.11.0] - 2026-10-18
 
 ### Agregado

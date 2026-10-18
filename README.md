@@ -15,6 +15,10 @@ Es la segunda versión de [bowser-spec-kit-ai](https://github.com/orestesmedina/
 - **Estándares por tecnología** como skills que se cargan solo cuando hacen falta: `go`, `react`, `postgres`, `php`, `mysql` y `web`. Cada proyecto instala solo las suyas.
 - **Controles que no dependen del agente:** secretos, mensajes de commit y archivos inmutables en cada commit; `make check` antes de cada push y en el CI; y `make verify` al cerrar, que exige pruebas, un plan grande para lo riesgoso y la revisión del `@revisor` (comprobada en las sesiones de OpenCode).
 
+## Documentación
+
+Todo lo que ofrece el kit, cuándo usar cada comando y qué hacer si algo falla: **[docs/](docs/README.md)**. Para empezar: [Qué es y cómo piensa](docs/01-que-es.md), [Instalar](docs/02-instalar.md) y [Elegir el comando](docs/03-elegir-el-comando.md).
+
 ## Instalar en un proyecto
 
 Requisitos: Git, Python 3.9+, `make` y OpenCode (en Windows, todo dentro de WSL/Ubuntu).
@@ -33,7 +37,7 @@ bowser init --skills go,react,postgres
 
 `--skills` es opcional: el instalador mira el proyecto y sugiere las que parecen servirle. Quedan anotadas en `.bowser/skills`; para quitar una, se borra de ahí y se vuelve a instalar.
 
-Después, en el proyecto:
+Después, en OpenCode: `/bowser-idea` si el proyecto es nuevo o `/bowser-discover` si ya existe (ver [Instalar](docs/02-instalar.md)). O, a mano:
 1. Completa `AGENTS.md` (qué es, cómo se corre, reglas) y los comandos `run`, `test` y `lint` del `Makefile`.
 2. Si el proyecto tiene archivos que no deben modificarse una vez versionados (migraciones), anótalos en `.bowser/inmutables`.
 3. Revisa los modelos en `.opencode/agents/*.md` (campo `model`) y confírmalos con `opencode models opencode-go`.
@@ -65,7 +69,7 @@ Para actualizar, en la carpeta del proyecto: `bowser update` (o `/bowser-update`
 
 ## Estado
 
-Versión 0.11.0: fases 0 a 3 del plan: el ciclo de una funcionalidad, la memoria, los principios, los estándares por tecnología y de documentación, los controles que no dependen del agente, `/bowser-idea` para empezar desde una idea, `/bowser-discover` para documentar un proyecto existente y `/bowser-roadmap` para ver el estado y replanear. Las seis skills vienen de `bowser-spec-kit-ai` y siguen sin probarse en un proyecto real. Ver `PLAN.md` y `GUIA.md`.
+Versión 0.11.1: fases 0 a 3 del plan: el ciclo de una funcionalidad, la memoria, los principios, los estándares por tecnología y de documentación, los controles que no dependen del agente, `/bowser-idea` para empezar desde una idea, `/bowser-discover` para documentar un proyecto existente y `/bowser-roadmap` para ver el estado y replanear. Las seis skills vienen de `bowser-spec-kit-ai` y siguen sin probarse en un proyecto real. Ver `PLAN.md`.
 
 ## Pruebas del kit
 

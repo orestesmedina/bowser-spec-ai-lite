@@ -237,7 +237,7 @@ def main() -> int:
         texto = agents.read_text(encoding="utf-8", errors="replace")
         if "**orquestador" in texto or "equipo/orquestador.md" in texto:
             avisos.append("AGENTS.md es el del kit anterior (el orquestador): se dejó la plantilla nueva en AGENTS.lite.md. "
-                          "Pasa a ella lo que sirva y reemplaza AGENTS.md (ver GUIA.md, 'Proyecto con el kit anterior').")
+                          "Pasa a ella lo que sirva y reemplaza AGENTS.md (ver https://github.com/orestesmedina/bowser-spec-ai-lite/blob/main/docs/02-instalar.md#en-un-proyecto-con-el-kit-anterior).")
             if escribir:
                 shutil.copyfile(PLANTILLA / "AGENTS.md", destino / "AGENTS.lite.md")
 
@@ -271,7 +271,7 @@ def main() -> int:
             avisos.append(f"opencode.json abre el agente «{agente}» por defecto. Para usar el kit, cambia default_agent a \"constructor\".")
     if (destino / ".kit-manifest.json").exists():
         avisos.append("Este proyecto tiene instalado bowser-spec-kit-ai (el kit anterior). Conviven mal: "
-                      "sigue los pasos de GUIA.md, 'Proyecto con el kit anterior'.")
+                      "sigue los pasos de https://github.com/orestesmedina/bowser-spec-ai-lite/blob/main/docs/02-instalar.md#en-un-proyecto-con-el-kit-anterior")
 
     if escribir:
         ruta_manifiesto.parent.mkdir(parents=True, exist_ok=True)
@@ -289,7 +289,7 @@ def main() -> int:
     for av in avisos:
         print("⚠ " + av)
     if not a.verificar and any(c.startswith("semilla      AGENTS.md") for c in cambios):
-        print("\nSiguiente paso: completa AGENTS.md y el Makefile (run, test, lint) con los datos del proyecto. Ver GUIA.md.")
+        print("\nSiguiente paso: completa AGENTS.md y el Makefile (run, test, lint) con los datos del proyecto,\no en OpenCode: /bowser-discover (proyecto existente) o /bowser-idea (proyecto nuevo). Guía: https://github.com/orestesmedina/bowser-spec-ai-lite/blob/main/docs/README.md")
     return 0
 
 
