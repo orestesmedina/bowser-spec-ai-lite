@@ -37,12 +37,14 @@ bowser init --skills go,react,postgres   # las tecnologías del proyecto
 
 Skills disponibles: `go`, `react`, `postgres`, `php`, `mysql`, `web`. Si no pones `--skills`, el instalador sugiere las que encuentre. `.bowser/principios.md` se instala siempre.
 
-Luego, a mano o pidiéndoselo al agente con `/bowser-feature` (tamaño pequeño):
+La forma recomendada es **`/bowser-discover`** en OpenCode: hace ingeniería inversa del proyecto en cinco pasadas (inventario, módulos, datos, convenciones y deuda, y una prueba de entendimiento en la que levanta el sistema en local y te explica un flujo para que lo confirmes). Trabaja en la rama `docs/descubrimiento`, hace un commit por pasada y no cambia el código del producto. Si la sesión se corta o se alarga, `/bowser-discover` sigue en la pasada pendiente (o nómbrala: `/bowser-discover datos`). Necesita que respondas sus preguntas; si el esquema de la base solo existe en una base viva, te pedirá un volcado del esquema.
+
+Si prefieres hacerlo a mano o por partes (con `/bowser-feature`, tamaño pequeño), esto es lo mínimo:
 
 1. **`AGENTS.md`**: qué es el proyecto, cómo se corre, su estructura y las reglas que no salen del código. Menos de ~100 líneas.
 2. **`Makefile`**: los comandos `run`, `test` y `lint` reales. `check` es lo que debe pasar antes de entregar: lo corren el hook antes de cada push y el CI, así que hasta que los definas, ni el push ni el CI pasan. Si el CI necesita preparar algo (dependencias, una base de datos), agrega el objetivo `ci-setup`.
 3. **`.bowser/inmutables`**: por ejemplo `backend/migrations/*.sql`. Revisa también `.bowser/verificacion`: qué cuenta como prueba y qué es riesgoso en tu proyecto.
-4. **`docs/producto/requerimientos.md`**: en un proyecto nuevo, escríbelo antes de la primera funcionalidad (visión, roles, alcance y los primeros `RF`). En uno existente, empieza solo con visión, roles y glosario; los `RF` que ya existen se agregan al tocarlos (o todos de una vez con `/bowser-discover`, cuando exista). El formato está en `.bowser/documentacion.md`.
+4. **`docs/producto/requerimientos.md`**: en un proyecto nuevo, escríbelo antes de la primera funcionalidad (visión, roles, alcance y los primeros `RF`). En uno existente, empieza solo con visión, roles y glosario; los `RF` que ya existen se agregan al tocarlos (o todos de una vez con `/bowser-discover`). El formato está en `.bowser/documentacion.md`.
 5. **`docs/memoria/`**: no hace falta llenarla toda el primer día. Empieza por `trampas.md` y `convenciones.md`; el resto se llena con `/bowser-close` en cada funcionalidad.
 6. `git add -A && git commit -m "chore: instala bowser-ai-lite"`.
 
@@ -119,7 +121,7 @@ Las pruebas del kit simulan OpenCode. La primera vez, en la versión real, compr
 | ¿Funcionó a la primera al probarlo tú? | Tú; en "Notas" |
 | ¿El agente se equivocó por no saber algo que estaba, o debía estar, en la memoria? | Tú; en "Notas" |
 
-Con esas tres líneas se decide qué ajustar antes de seguir con `/bowser-discover` (fase 2).
+Con esas tres líneas se decide qué ajustar antes de probar `/bowser-discover` en un proyecto existente (fase 2).
 
 ## 5. Si se corta la sesión
 

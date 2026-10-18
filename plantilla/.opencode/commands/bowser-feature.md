@@ -32,6 +32,8 @@ En un cambio normal muestras el plan en 5 a 10 líneas y sigues, salvo que la pe
 ## 3. Construir
 Sigue "Cómo trabajas" de tus instrucciones: prueba primero cuando puedas, corre la prueba puntual mientras trabajas, commits pequeños. En un cambio pequeño la rama es `fix/<nombre-corto>` y el plan no hace falta.
 
+**Código existente sin pruebas:** antes de cambiarlo, escribe sus **pruebas de caracterización**: fijan cómo se comporta hoy, aunque parezca raro o equivocado, con los casos que el cambio puede afectar. Van en su propio commit (`test: caracteriza <módulo>`), antes del cambio, y tienen que pasar sin tocar el código. Si una muestra un comportamiento que parece un error, no lo corrijas de paso: anótalo en `deuda.md` y pregunta. Al reconstruir un módulo entero, estas pruebas son las que dicen que el resto del sistema no notó la diferencia: se reemplaza por partes, cada parte con las pruebas en verde.
+
 ## 4. Comprobar
 - `make check` en verde.
 - Si hay interfaz o API: levántalo (`make run`) y comprueba el flujo de punta a punta. Di exactamente qué viste.

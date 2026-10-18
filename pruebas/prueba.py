@@ -92,7 +92,7 @@ def prueba_instalacion(base: Path) -> None:
     caso("no borra un comando viejo editado", (p / ".opencode/commands/cerrar.md").exists() and "ya no lo usa" in r.stdout, r.stdout)
     (p / ".opencode/commands/cerrar.md").unlink()
     caso("los comandos usan el prefijo bowser-", sorted(x.name for x in (p / ".opencode/commands").iterdir()) ==
-         ["bowser-close.md", "bowser-cost.md", "bowser-feature.md", "bowser-idea.md", "bowser-resume.md", "bowser-review.md", "bowser-roadmap.md", "bowser-update.md"])
+         ["bowser-close.md", "bowser-cost.md", "bowser-discover.md", "bowser-feature.md", "bowser-idea.md", "bowser-resume.md", "bowser-review.md", "bowser-roadmap.md", "bowser-update.md"])
 
     # --verificar no escribe.
     q = proyecto(base, "verificar")
@@ -399,6 +399,18 @@ def prueba_verificacion(base: Path) -> None:
     caso("/bowser-roadmap informa sin tocar nada y solo replanea si se pide", "sin modificar nada" in rm and "terminas aquí" in rm)
     for doc in ["docs/producto/roadmap.md", "docs/producto/requerimientos.md", "docs/memoria/producto.md", "docs/memoria/deuda.md", "docs/cambios/"]:
         caso(f"/bowser-roadmap lee {doc}", doc in rm)
+    dc = (p / ".opencode/commands/bowser-discover.md").read_text()
+    caso("instala /bowser-discover", "agent: constructor" in dc and "$ARGUMENTS" in dc)
+    caso("/bowser-discover no cambia cómo funciona el sistema", "sin cambiar cómo funciona" in dc)
+    caso("/bowser-discover lee el esquema real y no lee .env", "se **lee, no se recuerda**" in dc and "no leas `.env`" in dc)
+    caso("/bowser-discover reparte los módulos al explorador", "@explorador" in dc)
+    caso("/bowser-discover pide confirmar un flujo a la persona", "Explica un flujo clave" in dc)
+    caso("/bowser-discover lleva su avance para /bowser-resume", "docs/cambios/descubrimiento.md" in dc and "/bowser-resume" in dc)
+    for doc in ["AGENTS.md", "docs/memoria/arquitectura.md", "docs/memoria/producto.md", "docs/producto/requerimientos.md",
+                "docs/memoria/base-de-datos.md", "docs/memoria/convenciones.md", "docs/memoria/deuda.md", "docs/memoria/decisiones.md",
+                "docs/memoria/trampas.md", ".bowser/inmutables", ".bowser/verificacion"]:
+        caso(f"/bowser-discover escribe {doc} y existe su plantilla", doc.split("/")[-1] in dc and (p / doc).exists())
+    caso("/bowser-feature escribe pruebas de caracterización", "pruebas de caracterización" in (p / ".opencode/commands/bowser-feature.md").read_text())
     caso("instala /bowser-resume", "Estado" in (p / ".opencode/commands/bowser-resume.md").read_text())
     caso("el plan de /bowser-feature lleva su Estado", "/bowser-resume" in (p / ".opencode/commands/bowser-feature.md").read_text())
     caso("el CI corre make check y la verificación de la rama", "run: make check" in ci and "verificar.py --ci" in ci)

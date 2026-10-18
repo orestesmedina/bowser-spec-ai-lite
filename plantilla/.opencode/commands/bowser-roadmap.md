@@ -28,7 +28,7 @@ Muéstralo así, en no más de 25 líneas y en palabras de la persona, no de arc
 - **Pendientes:** preguntas abiertas de los requerimientos y la deuda de riesgo alto.
 - **Inconsistencias**, si las hay.
 
-Si `roadmap.md` y `requerimientos.md` siguen siendo la plantilla, dilo y sugiere `/bowser-idea` (proyecto nuevo) o escribirlos leyendo el código (proyecto existente). No inventes el estado.
+Si `roadmap.md` y `requerimientos.md` siguen siendo la plantilla, dilo y sugiere `/bowser-idea` (proyecto nuevo) o `/bowser-discover` (proyecto existente). No inventes el estado.
 
 ## 2. ¿Replanear?
 Pregunta en una línea: "¿Quieres cambiar algo del plan (orden, agregar, partir o descartar funcionalidades)?". Si dice que no, o no responde a eso, **terminas aquí**, sin haber cambiado nada.

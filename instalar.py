@@ -40,6 +40,7 @@ DEL_KIT = [
     ".opencode/commands/bowser-idea.md",
     ".opencode/commands/bowser-roadmap.md",
     ".opencode/commands/bowser-update.md",
+    ".opencode/commands/bowser-discover.md",
     ".githooks/pre-commit",
     ".githooks/commit-msg",
     ".githooks/pre-push",

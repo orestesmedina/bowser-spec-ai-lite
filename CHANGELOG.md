@@ -2,6 +2,15 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: [SemVer](https://semver.org/lang/es/).
 
+## [0.11.0] - 2026-10-18
+
+### Agregado
+- **`/bowser-discover`**: ingeniería inversa de un proyecto existente en cinco pasadas, sin cambiar cómo funciona: inventario (`AGENTS.md`, piezas, trampas y skills sugeridas), módulos (resumidos por `@explorador`; arquitectura, flujos, `producto.md` y un `RF` con estado `existe` por cada comportamiento), datos (el esquema leído de migraciones o de un volcado, con `erDiagram`; nunca `.env` ni la base de producción), convenciones, deuda, decisiones "(inferida)", inmutables y `.bowser/verificacion`, y una prueba de entendimiento (levantar el sistema en local y explicar un flujo para que la persona lo confirme). Rama `docs/descubrimiento`, un commit por pasada y el avance en `docs/cambios/descubrimiento.md`, así que se puede retomar. Al final, `@revisor` comprueba al menos cinco afirmaciones contra el código.
+- **Pruebas de caracterización** en `/bowser-feature`: antes de cambiar código existente sin pruebas, se escriben pruebas de cómo funciona hoy y se commitean aparte.
+
+### Cambiado
+- `/bowser-idea` y `/bowser-roadmap` mandan a `/bowser-discover` cuando el proyecto ya tiene código pero no memoria.
+
 ## [0.10.0] - 2026-10-18
 
 ### Agregado

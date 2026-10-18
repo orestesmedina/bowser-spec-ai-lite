@@ -9,7 +9,7 @@ La idea de la persona: $ARGUMENTS
 Tu trabajo aquí es de producto y arquitectura, no de programación: **no escribes código ni configuras herramientas**. Lo que sale de este comando son documentos que la persona aprueba, y de ahí en adelante cada funcionalidad se construye con `/bowser-feature`. Lee antes `.bowser/documentacion.md`: dice el formato de todo lo que vas a escribir.
 
 ## 0. Comprobar el punto de partida
-Mira la carpeta. Si ya hay código del producto (más allá de lo que instaló el kit), detente: este comando es para empezar desde cero. Dile a la persona que en un proyecto existente los documentos se escriben leyendo el código, y pregunta si quiere seguir de todos modos.
+Mira la carpeta. Si ya hay código del producto (más allá de lo que instaló el kit), detente: este comando es para empezar desde cero. Dile a la persona que para un proyecto existente está `/bowser-discover`, que escribe los documentos leyendo el código, y pregunta si quiere seguir de todos modos.
 Si `docs/producto/requerimientos.md` ya tiene contenido real (no la plantilla), muéstralo y pregunta si lo reemplazas o lo completas.
 
 ## 1. Entrevista

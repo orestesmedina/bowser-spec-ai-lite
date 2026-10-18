@@ -46,6 +46,7 @@ Para actualizar, en la carpeta del proyecto: `bowser update` (o `/bowser-update`
 | Quiero… | Escribo en OpenCode |
 |---|---|
 | Empezar un proyecto desde una idea | `/bowser-idea una app para que los talleres agenden citas` |
+| Documentar un proyecto que ya existe (ingeniería inversa) | `/bowser-discover` |
 | Una funcionalidad, un arreglo o un cambio | `/bowser-feature los clientes pueden exportar sus pedidos a Excel` |
 | Una revisión independiente de la rama | `/bowser-review` |
 | Cerrar lo terminado (memoria, historial, costo) | `/bowser-close` |
@@ -64,7 +65,7 @@ Para actualizar, en la carpeta del proyecto: `bowser update` (o `/bowser-update`
 
 ## Estado
 
-Versión 0.10.0: fases 0, 1 y 3 del plan: el ciclo de una funcionalidad, la memoria, los principios, los estándares por tecnología y de documentación, los controles que no dependen del agente, `/bowser-idea` para empezar desde una idea y `/bowser-roadmap` para ver el estado y replanear. Las seis skills vienen de `bowser-spec-kit-ai` y siguen sin probarse en un proyecto real. Pendiente: `/bowser-discover` (proyectos existentes). Ver `PLAN.md` y `GUIA.md`.
+Versión 0.11.0: fases 0 a 3 del plan: el ciclo de una funcionalidad, la memoria, los principios, los estándares por tecnología y de documentación, los controles que no dependen del agente, `/bowser-idea` para empezar desde una idea, `/bowser-discover` para documentar un proyecto existente y `/bowser-roadmap` para ver el estado y replanear. Las seis skills vienen de `bowser-spec-kit-ai` y siguen sin probarse en un proyecto real. Ver `PLAN.md` y `GUIA.md`.
 
 ## Pruebas del kit
 
