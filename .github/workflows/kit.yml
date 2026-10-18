@@ -37,14 +37,33 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        opencode: ["latest"]
+        include:
+          # La última de npm (opencode-ai), o la que se pida al correrlo a mano.
+          - opencode: latest
+            instalador: npm
+          # La que usa Orestes, con el instalador oficial (queda en ~/.opencode/bin).
+          - opencode: "2.0.32"
+            instalador: oficial
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
+        if: matrix.instalador == 'npm'
         with:
           node-version: lts/*
-      - name: Instalar OpenCode
+      - name: Instalar OpenCode (npm)
+        if: matrix.instalador == 'npm'
         run: npm install -g "opencode-ai@${{ github.event.inputs.opencode || matrix.opencode }}"
+      - name: Instalar OpenCode (instalador oficial)
+        if: matrix.instalador == 'oficial'
+        run: |
+          curl -fsSL https://opencode.ai/install | bash -s -- --version "${{ matrix.opencode }}"
+          echo "$HOME/.opencode/bin" >> "$GITHUB_PATH"
+      - name: Comprobar la versión instalada
+        if: matrix.instalador == 'oficial'
+        run: |
+          v=$(opencode --version)
+          echo "$v"
+          case "$v" in *"${{ matrix.opencode }}"*) ;; *) echo "Se pidió ${{ matrix.opencode }} y quedó $v" >&2; exit 1 ;; esac
       - run: git config --global user.email ci@example.com && git config --global user.name CI
       - run: python3 pruebas/opencode_real.py
 

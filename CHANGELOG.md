@@ -2,6 +2,13 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: [SemVer](https://semver.org/lang/es/).
 
+## [0.12.1] - 2026-10-18
+
+### Corregido
+- `/bowser-feature` crea la rama desde la principal actualizada (`git switch main && git pull --ff-only`). Si estás en otra rama o hay una funcionalidad sin mergear, pregunta de dónde sale la rama nueva, recomendando la principal: con merges por squash, partir de otra rama hace chocar el pull request siguiente. `/bowser-close` lo recuerda al terminar. Visto en un proyecto real.
+- El CI del kit prueba también contra OpenCode 2.0.32, instalado con el instalador oficial (`opencode.ai/install`), además de la última de npm.
+- Documentación: un párrafo de *Archivos que instala* que había quedado en medio de una lista, y cómo rehacer una rama que choca después de un squash (*Problemas frecuentes*).
+
 ## [0.12.0] - 2026-10-18
 
 ### Agregado

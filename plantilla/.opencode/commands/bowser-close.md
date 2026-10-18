@@ -20,4 +20,4 @@ Notas de la persona (puede venir vacío): $ARGUMENTS
 2. **Costo.** Ejecuta `make cost` y toma el total de tokens y el costo equivalente.
 3. **Historial.** Agrega una línea a `docs/producto/historial.md`: fecha, funcionalidad, rama, tamaño, tokens, costo, vueltas de revisión y una nota breve (qué costó más, o qué falló). Actualiza su estado en `docs/producto/roadmap.md`.
 4. **Commit** de todo esto: `docs: memoria e historial de <funcionalidad>`.
-5. Muestra a la persona, en pocas líneas, qué cambiaste en la memoria y el costo. Recuérdale que el push y el merge los hace ella (o pídele permiso si quiere que lo hagas tú).
+5. Muestra a la persona, en pocas líneas, qué cambiaste en la memoria y el costo. Recuérdale que el push y el merge los hace ella (o pídele permiso si quiere que lo hagas tú), y que la siguiente funcionalidad empieza desde la rama principal actualizada, después del merge.

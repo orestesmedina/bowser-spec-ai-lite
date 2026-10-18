@@ -18,7 +18,7 @@ Si el cambio va a tocar un archivo de la sección `[riesgo]` de `.bowser/verific
 Si el pedido es ambiguo en algo que cambia el resultado, pregúntalo junto con el tamaño.
 
 ## 2. Plan (normal y grande)
-Crea la rama `feat/<nombre-corto>` (o `fix/…`) desde la rama principal actualizada. Escribe `docs/cambios/<nombre-corto>.md` (el mismo nombre de la rama), de una página como máximo. Empieza con la línea `**Tamaño:** normal` o `**Tamaño:** grande`, y haz su commit (`docs: plan de <nombre-corto>`) **antes** de tocar código:
+Crea la rama `feat/<nombre-corto>` (o `fix/…`) desde la rama principal actualizada (por ejemplo, `git switch main && git pull --ff-only`), sin preguntar cuando estás en la rama principal y no hay otra funcionalidad a medias. Si estás en otra rama o hay una funcionalidad sin mergear, **pregunta de dónde sale la rama nueva**, recomendando la principal: si sale de otra rama y esa se mergea con squash, la nueva va a chocar con la principal y habrá que rehacerla sobre ella (`git rebase --onto main <rama-anterior>`). Anota la base elegida en el plan. Escribe `docs/cambios/<nombre-corto>.md` (el mismo nombre de la rama), de una página como máximo. Empieza con la línea `**Tamaño:** normal` o `**Tamaño:** grande`, y haz su commit (`docs: plan de <nombre-corto>`) **antes** de tocar código:
 
 - **Qué se pide**, en palabras de la persona, y qué queda fuera. Qué requisitos de `docs/producto/requerimientos.md` cubre (`RF-NN`) o cuáles agrega, con sus criterios de aceptación.
 - **Cómo se hace:** archivos o módulos que cambian, datos que cambian (tablas, columnas, migraciones) y por qué así.
@@ -30,7 +30,7 @@ Crea la rama `feat/<nombre-corto>` (o `fix/…`) desde la rama principal actuali
 En un cambio normal muestras el plan en 5 a 10 líneas y sigues, salvo que la persona te frene. En uno grande te detienes hasta que diga que sí.
 
 ## 3. Construir
-Sigue "Cómo trabajas" de tus instrucciones: prueba primero cuando puedas, corre la prueba puntual mientras trabajas, commits pequeños. En un cambio pequeño la rama es `fix/<nombre-corto>` y el plan no hace falta.
+Sigue "Cómo trabajas" de tus instrucciones: prueba primero cuando puedas, corre la prueba puntual mientras trabajas, commits pequeños. En un cambio pequeño la rama es `fix/<nombre-corto>`, también desde la rama principal actualizada, y el plan no hace falta.
 
 **Código existente sin pruebas:** antes de cambiarlo, escribe sus **pruebas de caracterización**: fijan cómo se comporta hoy, aunque parezca raro o equivocado, con los casos que el cambio puede afectar. Van en su propio commit (`test: caracteriza <módulo>`), antes del cambio, y tienen que pasar sin tocar el código. Si una muestra un comportamiento que parece un error, no lo corrijas de paso: anótalo en `deuda.md` y pregunta. Al reconstruir un módulo entero, estas pruebas son las que dicen que el resto del sistema no notó la diferencia: se reemplaza por partes, cada parte con las pruebas en verde.
 

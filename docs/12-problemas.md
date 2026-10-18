@@ -126,6 +126,16 @@ Para seguir: abre OpenCode y busca la sesión anterior en su lista. Si está y n
 
 Lo único que el kit no protege es el disco: si la máquina se daña, se pierde lo que no se subió. Sube la rama de trabajo al terminar el día.
 
+### Mi pull request choca con la rama principal después de mergear el anterior
+
+La rama nueva salió de la rama de la funcionalidad anterior, no de la principal, y el merge anterior se hizo con squash (un solo commit nuevo en la principal). Git no reconoce que esos commits ya están ahí. Rehaz la rama sobre la principal, dejando fuera los commits de la anterior:
+
+```bash
+git fetch origin && git rebase --onto origin/main <rama-anterior> <rama-nueva>
+```
+
+Para que no pase: cada funcionalidad empieza desde la rama principal actualizada, después del merge de la anterior. `/bowser-feature` lo hace así y, si estás en otra rama o la anterior no se mergeó, te pregunta de dónde sale.
+
 ### No sé en qué iba el proyecto
 
 `/bowser-roadmap`.

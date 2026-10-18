@@ -5,9 +5,9 @@
 Los archivos que el kit deja en tu proyecto son de dos tipos:
 
 - **Del kit**: se reemplazan al actualizar. Si editas uno, el instalador lo detecta (guarda su huella en `.bowser/kit.json`), **no lo toca** y avisa. Si el kit trae cambios en un archivo que editaste, el aviso te dice cómo verlos para pasarlos a mano. `--forzar` lo reemplaza y deja tu versión en `.bowser/respaldo/`; lo que habías cambiado se pierde hasta que lo vuelvas a aplicar.
+- **Del proyecto**: se copian solo si no existen, como punto de partida. Desde ahí son tuyos y el kit nunca los vuelve a tocar.
 
 Por eso lo que el proyecto necesita ajustar va en sus propios archivos, no en los del kit: las reglas en `AGENTS.md`, las versiones del CI en `.bowser/versiones` y lo que el CI prepara en `make ci-setup`.
-- **Del proyecto**: se copian solo si no existen, como punto de partida. Desde ahí son tuyos y el kit nunca los vuelve a tocar.
 
 Si una versión nueva del kit deja de usar un archivo suyo (por ejemplo, un comando que cambió de nombre), el instalador lo borra, salvo que lo hayas editado: en ese caso lo deja y avisa.
 
