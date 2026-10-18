@@ -4,7 +4,9 @@
 
 Los archivos que el kit deja en tu proyecto son de dos tipos:
 
-- **Del kit**: se reemplazan al actualizar. Si editas uno, el instalador lo detecta (guarda su huella en `.bowser/kit.json`), **no lo toca** y avisa. `--forzar` lo reemplaza y deja tu versión en `.bowser/respaldo/`.
+- **Del kit**: se reemplazan al actualizar. Si editas uno, el instalador lo detecta (guarda su huella en `.bowser/kit.json`), **no lo toca** y avisa. Si el kit trae cambios en un archivo que editaste, el aviso te dice cómo verlos para pasarlos a mano. `--forzar` lo reemplaza y deja tu versión en `.bowser/respaldo/`; lo que habías cambiado se pierde hasta que lo vuelvas a aplicar.
+
+Por eso lo que el proyecto necesita ajustar va en sus propios archivos, no en los del kit: las reglas en `AGENTS.md`, las versiones del CI en `.bowser/versiones` y lo que el CI prepara en `make ci-setup`.
 - **Del proyecto**: se copian solo si no existen, como punto de partida. Desde ahí son tuyos y el kit nunca los vuelve a tocar.
 
 Si una versión nueva del kit deja de usar un archivo suyo (por ejemplo, un comando que cambió de nombre), el instalador lo borra, salvo que lo hayas editado: en ese caso lo deja y avisa.
@@ -32,6 +34,7 @@ Si una versión nueva del kit deja de usar un archivo suyo (por ejemplo, un coma
 | `Makefile` | `run`, `test`, `lint`, `check` y opcionalmente `ci-setup`. Si ya tenías uno, solo se le agrega `-include bowser.mk` |
 | `opencode.json` | Abre OpenCode con el agente `constructor` y fija el modelo para tareas chicas |
 | `.bowser/verificacion` | Qué cuenta como prueba, como riesgo y como código ([detalle](08-controles.md#bowserverificacion)) |
+| `.bowser/versiones` | Las versiones de Go, PHP y Node que usa el CI ([detalle](08-controles.md#el-ci)) |
 | `.bowser/inmutables` | Archivos que no se modifican una vez en git |
 | `.bowser/skills` | Las skills del proyecto, una por línea |
 | `docs/producto/requerimientos.md`, `roadmap.md`, `historial.md` | Qué se construye, en qué orden y qué se entregó |

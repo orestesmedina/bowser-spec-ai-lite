@@ -33,18 +33,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      # Las versiones las decide el proyecto en .bowser/versiones (no se edita este archivo para eso).
+      # Sin valor: Go la de go.mod, PHP la última y Node la LTS.
+      - name: Versiones del proyecto
+        id: versiones
+        run: |
+          leer() { sed -n "s/^[[:space:]]*$1[[:space:]]*=[[:space:]]*\([^#[:space:]]*\).*/\1/p" .bowser/versiones 2>/dev/null | head -n 1; }
+          go=$(leer go); php=$(leer php); node=$(leer node)
+          if [ -z "$go" ]; then
+            gomod=$(git ls-files 'go.mod' '*/go.mod' | head -n 1)
+            [ -n "$gomod" ] && go=$(sed -n 's/^go[[:space:]]\{1,\}\([0-9][0-9.]*\).*/\1/p' "$gomod" | head -n 1)
+          fi
+          { echo "go=${go:-stable}"; echo "php=${php:-latest}"; echo "node=${node:-lts/*}"; } | tee -a "$GITHUB_OUTPUT"
       - if: hashFiles('**/go.mod') != ''
         uses: actions/setup-go@v5
         with:
-          go-version: stable
+          go-version: ${{ steps.versiones.outputs.go }}
       - if: hashFiles('**/package.json') != ''
         uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: ${{ steps.versiones.outputs.node }}
       - if: hashFiles('**/composer.json') != ''
         uses: shivammathur/setup-php@v2
         with:
-          php-version: latest
+          php-version: ${{ steps.versiones.outputs.php }}
       - name: Preparar (make ci-setup, si existe)
         run: if make -n ci-setup >/dev/null 2>&1; then make ci-setup; fi
       - name: make check

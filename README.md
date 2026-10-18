@@ -65,11 +65,11 @@ Para actualizar, en la carpeta del proyecto: `bowser update` (o `/bowser-update`
 | Archivo | De quién es |
 |---|---|
 | `.opencode/agents/` (constructor, revisor, explorador), `.opencode/commands/`, `.opencode/skills/` (las elegidas), `.bowser/principios.md`, `.bowser/documentacion.md`, `.githooks/`, `.bowser/costo.py`, `.bowser/verificar.py`, `bowser.mk`, `.github/workflows/bowser.yml` | **Del kit:** se reemplazan al actualizar. Si los editas, el instalador no los toca y avisa |
-| `AGENTS.md`, `Makefile`, `opencode.json`, `docs/memoria/`, `docs/producto/`, `.bowser/inmutables`, `.bowser/skills`, `.bowser/verificacion` | **Del proyecto:** se copian solo si no existen |
+| `AGENTS.md`, `Makefile`, `opencode.json`, `docs/memoria/`, `docs/producto/`, `.bowser/inmutables`, `.bowser/skills`, `.bowser/verificacion`, `.bowser/versiones` | **Del proyecto:** se copian solo si no existen |
 
 ## Estado
 
-Versión 0.11.2: fases 0 a 3 del plan: el ciclo de una funcionalidad, la memoria, los principios, los estándares por tecnología y de documentación, los controles que no dependen del agente, `/bowser-idea` para empezar desde una idea, `/bowser-discover` para documentar un proyecto existente y `/bowser-roadmap` para ver el estado y replanear. Las seis skills vienen de `bowser-spec-kit-ai` y siguen sin probarse en un proyecto real. Ver `PLAN.md`.
+Versión 0.12.0: fases 0 a 3 del plan: el ciclo de una funcionalidad, la memoria, los principios, los estándares por tecnología y de documentación, los controles que no dependen del agente, `/bowser-idea` para empezar desde una idea, `/bowser-discover` para documentar un proyecto existente y `/bowser-roadmap` para ver el estado y replanear. Las seis skills vienen de `bowser-spec-kit-ai` y siguen sin probarse en un proyecto real. Ver `PLAN.md`.
 
 ## Pruebas del kit
 

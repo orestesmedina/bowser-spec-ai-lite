@@ -2,6 +2,19 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: [SemVer](https://semver.org/lang/es/).
 
+## [0.12.0] - 2026-10-18
+
+### Agregado
+- **`.bowser/versiones`** (del proyecto): las versiones de Go, PHP y Node que usa el CI. Sin valor, Go toma la de `go.mod`, PHP la última y Node la LTS. Antes, fijarlas obligaba a editar el workflow del kit, y la siguiente actualización con `--forzar` las borraba.
+
+### Cambiado
+- **Cuando el kit trae cambios en un archivo que editaste**, `bowser update` no lo toca y ahora te dice cómo ver esos cambios (`diff -u <archivo> <el del kit>`) para pasarlos a mano. Si el kit no cambió ese archivo, solo avisa que se respeta.
+- `--forzar` avisa qué reemplazó, dónde quedó tu versión y que hay que volver a aplicar tus cambios.
+- `/bowser-update` ya no usa `--forzar` por su cuenta: muestra el diff, propone pasar los cambios a mano y, si se forzó, vuelve a aplicar lo del proyecto y revisa si la memoria dependía de eso.
+
+### Para actualizar desde 0.11.x
+Si fijaste versiones en `.github/workflows/bowser.yml`, pásalas a `.bowser/versiones` y deja que `bowser update --forzar` deje el workflow del kit. Corrige la nota de 0.11.2: forzar sin volver a aplicar lo tuyo borra tus cambios.
+
 ## [0.11.2] - 2026-10-18
 
 ### Corregido

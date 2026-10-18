@@ -1,0 +1,6 @@
+# bowser-ai-lite · Versiones que usa el CI (.github/workflows/bowser.yml). Este archivo es del proyecto.
+# Pon las mismas que corren en local y en producción, para que el CI pruebe lo mismo que tú.
+# Sin valor: Go toma la de go.mod, PHP la última y Node la LTS. Una línea por tecnología: nombre=versión.
+go=
+php=
+node=

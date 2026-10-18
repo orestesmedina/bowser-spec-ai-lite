@@ -58,12 +58,22 @@ git commit -m "chore: sube el límite de memoria del contenedor" -m "Sin-pruebas
 | Trabajo | Qué hace |
 |---|---|
 | Búsqueda de secretos | gitleaks sobre los commits del push o del pull request |
-| make check | Instala Go, Node o PHP si el proyecto los usa (por `go.mod`, `package.json`, `composer.json`), corre `make ci-setup` si existe y luego `make check` |
+| make check | Instala Go, Node o PHP si el proyecto los usa (por `go.mod`, `package.json`, `composer.json`), en las versiones de `.bowser/versiones`; corre `make ci-setup` si existe y luego `make check` |
 | Pruebas y tamaño de la rama | Solo en pull requests: `make verify` en modo CI (pruebas y tamaño) |
+
+**Las versiones van en `.bowser/versiones`**, que es del proyecto, no en el workflow. Pon las mismas que corren en local y en producción, para que el CI pruebe lo mismo:
+
+```
+go=1.27
+php=8.4
+node=22
+```
+
+Sin valor, Go toma la de `go.mod`, PHP la última y Node la LTS. No edites el workflow para fijarlas: el workflow es del kit y, si lo editas, cada mejora que traiga el kit tendrás que pasarla a mano.
 
 El workflow solo pide permisos de lectura (`contents` y `pull-requests`, que gitleaks necesita para listar los commits del pull request).
 
-Si las pruebas necesitan algo más (dependencias, una base de datos), ponlo en el objetivo `ci-setup` del `Makefile`. Si necesitan un servicio (PostgreSQL, MySQL), agrégalo como `services:` del trabajo "make check" en el workflow; al editarlo, el archivo pasa a ser tuyo y `bowser update` lo respeta.
+Si las pruebas necesitan algo más (dependencias, una base de datos), ponlo en el objetivo `ci-setup` del `Makefile`. Si necesitan un servicio (PostgreSQL, MySQL), agrégalo como `services:` del trabajo "make check" en el workflow. Al editarlo, el archivo pasa a ser tuyo: `bowser update` no lo toca y, cuando el kit traiga cambios en él, te muestra cómo verlos (`diff -u`) para que los pases a mano.
 
 Para que el CI frene un merge, actívalo en GitHub: *Settings → Branches → Branch protection rules* y marca los tres trabajos como obligatorios.
 

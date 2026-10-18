@@ -94,6 +94,16 @@ Alguien editó archivos dentro de `~/.bowser-ai-lite`. Míralos con `git -C ~/.b
 
 No hay conexión con GitHub. `bowser update` sigue con la versión que ya tienes.
 
+### Una actualización deshizo un cambio mío
+
+Pasa si se usó `--forzar` en un archivo del kit que habías editado. Tu versión está en `.bowser/respaldo/`:
+
+```bash
+diff -u .bowser/respaldo/.github/workflows/bowser.yml .github/workflows/bowser.yml
+```
+
+Vuelve a aplicar lo tuyo o, mejor, muévelo a donde el kit lo espera para que no vuelva a pasar (las versiones del CI a `.bowser/versiones`, las reglas a `AGENTS.md`). Revisa también si `docs/memoria/deuda.md` o `decisiones.md` dependían de ese cambio.
+
 ### Quiero volver a una versión anterior
 
 `bowser update --version v0.10.0`.

@@ -59,6 +59,7 @@ SEMILLAS = [
     ".bowser/inmutables",
     ".bowser/skills",
     ".bowser/verificacion",
+    ".bowser/versiones",
     "docs/memoria/producto.md",
     "docs/memoria/arquitectura.md",
     "docs/memoria/base-de-datos.md",
@@ -169,19 +170,27 @@ def main() -> int:
         nuevo = sha(origen)
         if dst.exists():
             actual = sha(dst)
+            if actual == nuevo:
+                manifiesto[rel] = nuevo
+                continue
             editado = rel in hashes_previos and actual != hashes_previos[rel]
             ajeno = rel not in hashes_previos and actual != nuevo
             if (editado or ajeno) and not a.forzar:
-                avisos.append(f"{rel}: el proyecto tiene su propia versión; no se tocó (usa --forzar para reemplazarla con respaldo).")
+                if nuevo == hashes_previos.get(rel):
+                    avisos.append(f"{rel}: el proyecto tiene su propia versión; se respeta (el kit no trae cambios en él).")
+                else:
+                    avisos.append(f"{rel}: el proyecto tiene su propia versión y el kit trae cambios en él; no se tocó.\n"
+                                  f"    Para verlos: diff -u {rel} {origen}\n"
+                                  "    Pasa a mano lo que sirva. --forzar reemplaza tu versión (queda en .bowser/respaldo/) "
+                                  "y tendrás que volver a aplicar tus cambios.")
                 manifiesto[rel] = hashes_previos.get(rel, actual)
-                continue
-            if actual == nuevo:
-                manifiesto[rel] = nuevo
                 continue
             if escribir and (editado or ajeno):
                 respaldo = destino / ".bowser/respaldo" / rel
                 respaldo.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(dst, respaldo)
+                avisos.append(f"{rel}: se reemplazó tu versión; quedó en .bowser/respaldo/{rel}. "
+                              f"Compárala (diff -u .bowser/respaldo/{rel} {rel}) y vuelve a aplicar lo que era del proyecto.")
             cambios.append(f"actualizado  {rel}")
         else:
             cambios.append(f"nuevo        {rel}")

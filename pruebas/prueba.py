@@ -73,6 +73,18 @@ def prueba_instalacion(base: Path) -> None:
     r = instalar(p, "--forzar")
     caso("--forzar lo reemplaza", "Regla propia" not in rev.read_text())
     caso("--forzar deja respaldo", "Regla propia" in (p / ".bowser/respaldo/.opencode/agents/revisor.md").read_text())
+    caso("--forzar avisa que hay que volver a aplicar lo propio", "vuelve a aplicar" in r.stdout, r.stdout)
+
+    # Un archivo editado que el kit cambia: no se toca, y el aviso dice cómo ver los cambios del kit.
+    kit_json = p / ".bowser/kit.json"
+    datos = json.loads(kit_json.read_text())
+    datos["archivos"][".opencode/agents/revisor.md"] = "0" * 64  # el kit instaló otra versión antes
+    kit_json.write_text(json.dumps(datos))
+    rev.write_text(rev.read_text() + "\nRegla propia.\n")
+    r = instalar(p)
+    caso("si el kit cambia un archivo editado, lo respeta y muestra cómo ver el diff",
+         "Regla propia" in rev.read_text() and "kit trae cambios" in r.stdout and "diff -u .opencode/agents/revisor.md" in r.stdout, r.stdout)
+    instalar(p, "--forzar")
 
     # Las semillas son del proyecto: no se reemplazan.
     (p / "docs/memoria/trampas.md").write_text("mía\n")
@@ -421,6 +433,28 @@ def prueba_workflow(base: Path) -> None:
     wf = (PLANTILLA / "github/bowser.yml").read_text(encoding="utf-8")
     caso("el workflow pide solo lectura, con permiso para listar los commits del pull request (gitleaks)",
          "permissions:\n  contents: read\n  pull-requests: read\n" in wf and "write" not in wf)
+
+    # El paso de versiones, tal como corre en el CI, en proyectos con y sin .bowser/versiones.
+    lineas = wf.split("        id: versiones\n        run: |\n", 1)[1].splitlines()
+    script = "\n".join(l[10:] for l in lineas[:next(i for i, l in enumerate(lineas) if not l.startswith("          "))])
+
+    def versiones(archivos: dict[str, str]) -> dict[str, str]:
+        d = Path(tempfile.mkdtemp(dir=base))
+        sh(["git", "init", "-q"], d)
+        for rel, texto in archivos.items():
+            (d / rel).parent.mkdir(parents=True, exist_ok=True)
+            (d / rel).write_text(texto)
+        sh(["git", "add", "-A"], d)
+        salida = d / "salida"
+        sh(["bash", "-c", script], d, {**os.environ, "GITHUB_OUTPUT": str(salida)})
+        return dict(l.split("=", 1) for l in salida.read_text().splitlines())
+
+    v = versiones({".bowser/versiones": "go=\nphp=8.4   # la de producción\nnode=22\n", "tracker/go.mod": "module x\n\ngo 1.27.1\n"})
+    caso("el CI usa las versiones de .bowser/versiones y la de go.mod si no hay", v == {"go": "1.27.1", "php": "8.4", "node": "22"}, v)
+    v = versiones({".bowser/versiones": "go=1.26\n", "go.mod": "module x\n\ngo 1.27\n"})
+    caso("la versión de .bowser/versiones manda sobre go.mod", v.get("go") == "1.26", v)
+    v = versiones({"README.md": "hola\n"})
+    caso("sin versiones, el CI usa las más nuevas", v == {"go": "stable", "php": "latest", "node": "lts/*"}, v)
 
 
 def prueba_wiki(base: Path) -> None:
