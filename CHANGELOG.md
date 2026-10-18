@@ -2,6 +2,11 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: [SemVer](https://semver.org/lang/es/).
 
+## [0.11.2] - 2026-10-18
+
+### Corregido
+- **El CI del proyecto fallaba en los pull requests** en la búsqueda de secretos: gitleaks no podía listar los commits del pull request (403 "Resource not accessible by integration") en los repositorios donde el token de GitHub solo lee el contenido. El workflow ahora declara `permissions: contents: read, pull-requests: read`. Para recibirlo: `bowser update` (si editaste `.github/workflows/bowser.yml`, agrega esas líneas a mano o usa `--forzar`).
+
 ## [0.11.1] - 2026-10-18
 
 ### Agregado

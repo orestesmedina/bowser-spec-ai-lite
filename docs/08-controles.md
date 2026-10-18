@@ -61,6 +61,8 @@ git commit -m "chore: sube el límite de memoria del contenedor" -m "Sin-pruebas
 | make check | Instala Go, Node o PHP si el proyecto los usa (por `go.mod`, `package.json`, `composer.json`), corre `make ci-setup` si existe y luego `make check` |
 | Pruebas y tamaño de la rama | Solo en pull requests: `make verify` en modo CI (pruebas y tamaño) |
 
+El workflow solo pide permisos de lectura (`contents` y `pull-requests`, que gitleaks necesita para listar los commits del pull request).
+
 Si las pruebas necesitan algo más (dependencias, una base de datos), ponlo en el objetivo `ci-setup` del `Makefile`. Si necesitan un servicio (PostgreSQL, MySQL), agrégalo como `services:` del trabajo "make check" en el workflow; al editarlo, el archivo pasa a ser tuyo y `bowser update` lo respeta.
 
 Para que el CI frene un merge, actívalo en GitHub: *Settings → Branches → Branch protection rules* y marca los tres trabajos como obligatorios.

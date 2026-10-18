@@ -416,6 +416,13 @@ def prueba_verificacion(base: Path) -> None:
     caso("el CI corre make check y la verificación de la rama", "run: make check" in ci and "verificar.py --ci" in ci)
 
 
+def prueba_workflow(base: Path) -> None:
+    print("Workflow del proyecto")
+    wf = (PLANTILLA / "github/bowser.yml").read_text(encoding="utf-8")
+    caso("el workflow pide solo lectura, con permiso para listar los commits del pull request (gitleaks)",
+         "permissions:\n  contents: read\n  pull-requests: read\n" in wf and "write" not in wf)
+
+
 def prueba_wiki(base: Path) -> None:
     print("Documentación del kit (docs/)")
     import re
@@ -525,6 +532,7 @@ def main() -> int:
         prueba_costo(base)
         prueba_verificacion(base)
         prueba_distribucion(base)
+        prueba_workflow(base)
         prueba_wiki(base)
     print()
     if FALLOS:

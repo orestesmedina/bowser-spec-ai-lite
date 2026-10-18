@@ -10,6 +10,12 @@ on:
   push:
     branches: [main, master]
 
+# Solo lectura. gitleaks lista los commits del pull request (pull-requests: read); sin este permiso falla con 403
+# "Resource not accessible by integration" en los repositorios donde el token por defecto solo lee el contenido.
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
   secretos:
     name: Búsqueda de secretos

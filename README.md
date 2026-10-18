@@ -69,7 +69,7 @@ Para actualizar, en la carpeta del proyecto: `bowser update` (o `/bowser-update`
 
 ## Estado
 
-Versión 0.11.1: fases 0 a 3 del plan: el ciclo de una funcionalidad, la memoria, los principios, los estándares por tecnología y de documentación, los controles que no dependen del agente, `/bowser-idea` para empezar desde una idea, `/bowser-discover` para documentar un proyecto existente y `/bowser-roadmap` para ver el estado y replanear. Las seis skills vienen de `bowser-spec-kit-ai` y siguen sin probarse en un proyecto real. Ver `PLAN.md`.
+Versión 0.11.2: fases 0 a 3 del plan: el ciclo de una funcionalidad, la memoria, los principios, los estándares por tecnología y de documentación, los controles que no dependen del agente, `/bowser-idea` para empezar desde una idea, `/bowser-discover` para documentar un proyecto existente y `/bowser-roadmap` para ver el estado y replanear. Las seis skills vienen de `bowser-spec-kit-ai` y siguen sin probarse en un proyecto real. Ver `PLAN.md`.
 
 ## Pruebas del kit
 
