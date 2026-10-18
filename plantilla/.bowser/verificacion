@@ -1,0 +1,54 @@
+# bowser-ai-lite · Qué revisa `make verify` (y /bowser-close) en cada rama. Este archivo es del proyecto.
+# Un patrón por línea, estilo glob: * también cruza carpetas, y un patrón sin carpeta vale para el nombre del archivo.
+# Ajústalo a tu proyecto, pero no para que una rama pase: eso se decide con una persona.
+
+[pruebas]
+# Archivos que cuentan como pruebas.
+*_test.go
+*.test.*
+*.spec.*
+test_*.py
+*_test.py
+*Test.php
+*tests/*
+*test/*
+*__tests__/*
+*e2e/*
+
+[riesgo]
+# Tocar uno de estos convierte el cambio en grande: plan con «Tamaño: grande» commiteado antes y aprobado.
+*migrations/*
+*migraciones/*
+*.sql
+*auth*
+*permis*
+*login*
+*password*
+*contrasen*
+*pago*
+*payment*
+.bowser/inmutables
+
+[no-codigo]
+# Lo que no cuenta como código (documentación, configuración del kit, dependencias bloqueadas).
+*.md
+docs/*
+.bowser/*
+.opencode/*
+.githooks/*
+.github/*
+.gitignore
+LICENSE
+*.lock
+package-lock.json
+go.sum
+
+[memoria]
+# patrón -> archivo de memoria. Si la rama toca el patrón y no actualiza ese archivo, `make verify` avisa (no bloquea).
+# Las carpetas de código nuevas siempre avisan si no se actualizó docs/memoria/arquitectura.md.
+*migrations/* -> docs/memoria/base-de-datos.md
+*migraciones/* -> docs/memoria/base-de-datos.md
+*.sql -> docs/memoria/base-de-datos.md
+docker-compose* -> AGENTS.md
+compose.y* -> AGENTS.md
+Makefile -> AGENTS.md

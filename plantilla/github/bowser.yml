@@ -1,0 +1,55 @@
+name: Controles bowser
+
+# De bowser-ai-lite: se reemplaza al actualizar el kit (si lo editas, el instalador lo respeta y avisa).
+# Lo que el proyecto necesite para sus pruebas (instalar dependencias, levantar servicios) va en el objetivo
+# `ci-setup` del Makefile; este workflow lo corre si existe. Si las pruebas necesitan una base de datos, agrégala
+# aquí como `services:` del trabajo "pruebas".
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+
+jobs:
+  secretos:
+    name: Búsqueda de secretos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  pruebas:
+    name: make check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - if: hashFiles('**/go.mod') != ''
+        uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - if: hashFiles('**/package.json') != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - if: hashFiles('**/composer.json') != ''
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: latest
+      - name: Preparar (make ci-setup, si existe)
+        run: if make -n ci-setup >/dev/null 2>&1; then make ci-setup; fi
+      - name: make check
+        run: make check
+
+  rama:
+    name: Pruebas y tamaño de la rama
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - run: python3 .bowser/verificar.py --ci --base "origin/${{ github.base_ref }}"

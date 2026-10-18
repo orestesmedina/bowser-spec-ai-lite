@@ -1,0 +1,186 @@
+#!/usr/bin/env python3
+"""bowser-ai-lite · El comando `bowser`.
+
+  bowser init [carpeta] [--skills go,react] [--verificar] [--forzar]
+        Instala el kit en un proyecto (por defecto, la carpeta actual).
+  bowser update [carpeta] [--verificar] [--version vX.Y.Z] [--solo-kit] [--forzar]
+        Actualiza el kit a la última versión publicada y, si la carpeta tiene el kit, también el proyecto.
+        --verificar dice qué cambiaría sin tocar nada.
+  bowser version [carpeta]
+        La versión del kit y la del proyecto.
+Solo biblioteca estándar de Python 3.9+.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import subprocess
+import sys
+import tarfile
+import tempfile
+from pathlib import Path
+
+KIT = Path(__file__).resolve().parent.parent
+
+
+def git(*args: str) -> subprocess.CompletedProcess:
+    return subprocess.run(["git", "-C", str(KIT), *args], capture_output=True, text=True)
+
+
+def version_de(carpeta: Path) -> str:
+    try:
+        return (carpeta / "VERSION").read_text(encoding="utf-8").strip()
+    except OSError:
+        return "?"
+
+
+def version_del_proyecto(proyecto: Path) -> str | None:
+    try:
+        return json.loads((proyecto / ".bowser/kit.json").read_text(encoding="utf-8")).get("version")
+    except (OSError, ValueError):
+        return None
+
+
+def instalar(kit: Path, proyecto: Path, extra: list[str]) -> int:
+    return subprocess.run([sys.executable, str(kit / "instalar.py"), str(proyecto), *extra]).returncode
+
+
+def numeros(v: str) -> tuple[int, ...]:
+    return tuple(int(x) for x in re.findall(r"\d+", v)[:3])
+
+
+def cambios_entre(changelog: str, desde: str, hasta: str) -> list[str]:
+    """Las secciones del CHANGELOG posteriores a `desde`, hasta `hasta` incluida."""
+    lineas, dentro, salida = changelog.splitlines(), False, []
+    for l in lineas:
+        m = re.match(r"## \[(\d+\.\d+\.\d+)\]", l)
+        if m:
+            v = numeros(m.group(1))
+            dentro = numeros(desde) < v <= numeros(hasta)
+        if dentro:
+            salida.append(l)
+    return salida
+
+
+def ultima_version() -> str | None:
+    etiquetas = git("tag", "-l", "v*", "--sort=-v:refname").stdout.split()
+    return etiquetas[0] if etiquetas else None
+
+
+def exportar(ref: str, destino: Path) -> None:
+    """Copia los archivos del kit en la versión `ref`, sin cambiar la copia instalada."""
+    archivo = destino / "kit.tar"
+    r = git("archive", "--format=tar", "-o", str(archivo), ref)
+    if r.returncode != 0:
+        raise SystemExit(f"✗ No pude leer la versión {ref}: {r.stderr.strip()}")
+    with tarfile.open(archivo) as t:
+        if hasattr(tarfile, "data_filter"):
+            t.extractall(destino / "kit", filter="data")
+        else:
+            t.extractall(destino / "kit")
+
+
+def cmd_init(a: argparse.Namespace) -> int:
+    extra = (["--skills", a.skills] if a.skills else []) + (["--verificar"] if a.verificar else []) + \
+            (["--forzar"] if a.forzar else [])
+    return instalar(KIT, a.carpeta.resolve(), extra)
+
+
+def cmd_version(a: argparse.Namespace) -> int:
+    print(f"Kit: bowser-ai-lite {version_de(KIT)} ({KIT})")
+    pv = version_del_proyecto(a.carpeta.resolve())
+    print(f"Proyecto: {pv}" if pv else "Proyecto: esta carpeta no tiene el kit (bowser init)")
+    return 0
+
+
+def cmd_update(a: argparse.Namespace) -> int:
+    proyecto = a.carpeta.resolve()
+    actual = version_de(KIT)
+    es_git = (KIT / ".git").exists()
+
+    if es_git:
+        r = git("fetch", "-q", "--tags", "origin")
+        if r.returncode != 0:
+            print(f"⚠ No pude consultar las versiones nuevas: {r.stderr.strip()[:200]}", file=sys.stderr)
+        destino = a.version or ultima_version()
+        if not destino and git("symbolic-ref", "-q", "HEAD").returncode == 0:
+            # Sin versiones publicadas: se sigue la rama principal.
+            antes = git("rev-parse", "HEAD").stdout.strip()
+            if not a.verificar:
+                git("pull", "-q", "--ff-only")
+            if git("rev-parse", "HEAD").stdout.strip() != antes:
+                print(f"✓ Kit actualizado desde la rama principal: {actual} → {version_de(KIT)}")
+    else:
+        destino = None
+        print(f"⚠ El kit en {KIT} no es una copia de git: no lo puedo actualizar solo. "
+              "Instálalo con install.sh o actualízalo a mano.", file=sys.stderr)
+
+    nueva = destino.lstrip("v") if destino else actual
+    if destino and numeros(nueva) != numeros(actual):
+        print(f"Kit: {actual} → {nueva}")
+        with tempfile.TemporaryDirectory() as tmp:
+            exportar(destino, Path(tmp))
+            changelog = (Path(tmp) / "kit/CHANGELOG.md").read_text(encoding="utf-8")
+            notas = cambios_entre(changelog, actual, nueva)
+            if notas:
+                print("\n".join("  " + l for l in notas[:60]) + ("\n  …" if len(notas) > 60 else ""))
+            if a.verificar:
+                if not a.solo_kit and version_del_proyecto(proyecto):
+                    print()
+                    instalar(Path(tmp) / "kit", proyecto, ["--verificar"])
+                print("\n(--verificar: no se cambió nada)")
+                return 0
+        if git("-c", "core.fileMode=false", "status", "--porcelain", "--untracked-files=no").stdout.strip():
+            print(f"✗ La copia del kit en {KIT} tiene cambios locales: no la actualizo para no perderlos.", file=sys.stderr)
+            return 1
+        r = git("-c", "advice.detachedHead=false", "checkout", "-q", destino)
+        if r.returncode != 0:
+            print(f"✗ No pude cambiar el kit a {destino}: {r.stderr.strip()}", file=sys.stderr)
+            return 1
+        print(f"✓ Kit actualizado a {nueva}")
+    else:
+        print(f"Kit: {actual} (ya es la última versión)")
+
+    if a.solo_kit:
+        return 0
+    pv = version_del_proyecto(proyecto)
+    if not pv:
+        print(f"La carpeta {proyecto} no tiene el kit: no hay proyecto que actualizar (para instalarlo: bowser init).")
+        return 0
+    print(f"\nProyecto: {pv} → {version_de(KIT)}")
+    codigo = instalar(KIT, proyecto, (["--verificar"] if a.verificar else []) + (["--forzar"] if a.forzar else []))
+    if codigo == 0 and not a.verificar:
+        print("\nCierra OpenCode y vuelve a abrirlo en el proyecto: solo lee los comandos y agentes al arrancar.")
+    return codigo
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(prog="bowser", description="bowser-ai-lite: instala y actualiza el kit.")
+    sub = ap.add_subparsers(dest="orden", required=True)
+
+    p = sub.add_parser("init", help="instala el kit en un proyecto")
+    p.add_argument("carpeta", nargs="?", type=Path, default=Path("."))
+    p.add_argument("--skills", help="skills de tecnología, separadas por coma (go,react,postgres,php,mysql,web)")
+    p.add_argument("--verificar", action="store_true", help="dice qué haría, sin escribir")
+    p.add_argument("--forzar", action="store_true", help="reemplaza también los archivos del kit editados (con respaldo)")
+    p.set_defaults(func=cmd_init)
+
+    p = sub.add_parser("update", help="actualiza el kit y el proyecto")
+    p.add_argument("carpeta", nargs="?", type=Path, default=Path("."))
+    p.add_argument("--verificar", action="store_true", help="dice qué cambiaría, sin tocar nada")
+    p.add_argument("--version", help="una versión concreta (por ejemplo v0.9.0) en vez de la última")
+    p.add_argument("--solo-kit", action="store_true", help="actualiza el kit, no el proyecto")
+    p.add_argument("--forzar", action="store_true", help="reemplaza también los archivos del kit editados (con respaldo)")
+    p.set_defaults(func=cmd_update)
+
+    p = sub.add_parser("version", help="versión del kit y del proyecto")
+    p.add_argument("carpeta", nargs="?", type=Path, default=Path("."))
+    p.set_defaults(func=cmd_version)
+
+    a = ap.parse_args()
+    return a.func(a)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

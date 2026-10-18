@@ -1,0 +1,5 @@
+# Archivos que no se modifican, renombran ni borran una vez que están en git (se crea uno nuevo).
+# Un patrón por línea; * vale cualquier texto, también "/". Las líneas con # son comentarios.
+# Ejemplos:
+# backend/migrations/*.sql
+# database/*.sql

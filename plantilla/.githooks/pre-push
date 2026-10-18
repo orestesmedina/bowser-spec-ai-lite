@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# bowser-ai-lite · Antes de subir: lo que no pasa `make check` no sale de esta máquina.
+set -uo pipefail
+
+if ! make -n check >/dev/null 2>&1; then
+  echo "✗ El Makefile no tiene el objetivo 'check'. Defínelo (lo que debe pasar antes de entregar) y vuelve a subir." >&2
+  exit 1
+fi
+
+echo "Corriendo make check antes de subir…" >&2
+if ! make check >&2; then
+  echo "✗ Push detenido: make check falla. Corrige la causa; no uses --no-verify." >&2
+  exit 1
+fi
+exit 0

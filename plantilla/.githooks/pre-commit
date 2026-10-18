@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# bowser-ai-lite · Controles de cada commit, lo haga una persona o un agente. Solo bash y git.
+set -uo pipefail
+ERRORES=0
+fallar() { echo "✗ $1" >&2; ERRORES=1; }
+
+# 1. Nunca subir secretos.
+while IFS= read -r f; do
+  [ -z "$f" ] && continue
+  case "$f" in
+    *.env.example|*.env.sample) ;;
+    .env|*/.env|.env.*|*/.env.*) fallar "No se sube '$f': puede contener secretos." ;;
+    *.pem|*.key|*.p12|*.pfx|secrets/*|*/secrets/*) fallar "No se sube '$f': parece un secreto." ;;
+  esac
+done < <(git diff --cached --name-only --diff-filter=ACMR)
+
+if command -v gitleaks >/dev/null 2>&1; then
+  gitleaks protect --staged --redact --no-banner >/dev/null 2>&1 \
+    || fallar "gitleaks encontró posibles secretos. Detalle: gitleaks protect --staged -v"
+fi
+
+# 2. Archivos inmutables (.bowser/inmutables): lo que ya está en git no se modifica, renombra ni borra.
+if [ -f .bowser/inmutables ]; then
+  PATRONES=$(grep -vE '^[[:space:]]*(#|$)' .bowser/inmutables || true)
+  if [ -n "$PATRONES" ]; then
+    while IFS= read -r f; do
+      [ -z "$f" ] && continue
+      while IFS= read -r p; do
+        p="${p%"${p##*[![:space:]]}"}"
+        # shellcheck disable=SC2053
+        if [[ "$f" == $p ]]; then
+          fallar "'$f' es inmutable (.bowser/inmutables) y ya está en git: no se modifica. Crea uno nuevo."
+          break
+        fi
+      done <<< "$PATRONES"
+    done < <(git diff --cached --name-only --diff-filter=MDR HEAD 2>/dev/null; git diff --cached --name-status --diff-filter=R HEAD 2>/dev/null | awk '{print $2}')
+  fi
+fi
+
+if [ "$ERRORES" -ne 0 ]; then
+  echo "Commit detenido por los controles del proyecto. Corrige la causa; no uses --no-verify." >&2
+  exit 1
+fi
+exit 0
