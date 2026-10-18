@@ -2,6 +2,11 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: [SemVer](https://semver.org/lang/es/).
 
+## [0.12.4] - 2026-10-18
+
+### Corregido
+- `pruebas/opencode_real.py` con OpenCode 2: espera hasta 30 s a que el servicio de fondo termine de recargar y, en el CI, lo reinicia si no alcanzó.
+
 ## [0.12.3] - 2026-10-18
 
 ### Corregido

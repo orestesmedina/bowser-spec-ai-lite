@@ -10,10 +10,12 @@ OpenCode lee el kit como esperamos, sin abrir la interfaz.
 from __future__ import annotations
 
 import json
+import os
 import re
 import subprocess
 import sys
 import tempfile
+import time
 from pathlib import Path
 
 KIT = Path(__file__).resolve().parent.parent
@@ -150,6 +152,21 @@ def permiso(agente: dict, accion: str, recurso: str) -> str | None:
     return efecto
 
 
+def agentes_2(p: Path, agentes: dict, recargar: bool = True, espera: float = 30) -> dict:
+    """Los agentes que ve OpenCode 2 en la carpeta, esperando hasta `espera` segundos a que aparezcan los del kit."""
+    if recargar:
+        subprocess.run(["opencode", "reload"], cwd=p, capture_output=True, text=True, timeout=60)
+    limite, cargados = time.monotonic() + espera, {}
+    while True:
+        try:
+            cargados = {a.get("id"): a for a in opencode_json(p, "debug", "agents", tipo=list) if isinstance(a, dict)}
+        except (RuntimeError, ValueError) as e:
+            print(f"  (debug agents: {str(e)[:160]})")
+        if all(n in cargados for n in agentes) or time.monotonic() > limite:
+            return cargados
+        time.sleep(2)
+
+
 def opencode_2(p: Path, version: str, comandos: dict, agentes: dict, skills: list[str]) -> int:
     """OpenCode 2.x: `debug config` lista de dónde lee la configuración y `debug agents` los agentes cargados.
     No tiene forma de listar comandos ni skills desde la terminal."""
@@ -166,13 +183,13 @@ def opencode_2(p: Path, version: str, comandos: dict, agentes: dict, skills: lis
     caso("el agente por defecto es constructor", proyecto.get("default_agent") == "constructor", proyecto.get("default_agent"))
 
     print("Agentes")
-    # OpenCode 2 responde desde un servicio de fondo que no lee los agentes de una carpeta nueva hasta `opencode reload`.
-    subprocess.run(["opencode", "reload"], cwd=p, capture_output=True, text=True, timeout=60)
-    try:
-        cargados = {a.get("id"): a for a in opencode_json(p, "debug", "agents", tipo=list) if isinstance(a, dict)}
-    except (RuntimeError, ValueError) as e:
-        caso("OpenCode lista los agentes", False, e)
-        cargados = {}
+    # OpenCode 2 responde desde un servicio de fondo que no lee los agentes de una carpeta nueva hasta `opencode reload`,
+    # y la recarga puede tardar. En el CI, si no alcanza, se reinicia el servicio (en tu máquina no: cortaría tus sesiones).
+    cargados = agentes_2(p, agentes)
+    if not all(n in cargados for n in agentes) and os.environ.get("CI"):
+        print("  (el servicio no vio los agentes tras recargar: se reinicia)")
+        subprocess.run(["opencode", "service", "stop"], cwd=p, capture_output=True, text=True, timeout=60)
+        cargados = agentes_2(p, agentes, recargar=False)
     for nombre, archivo in sorted(agentes.items()):
         fm = frontmatter(archivo)
         a = cargados.get(nombre) or {}
