@@ -47,13 +47,14 @@ Todos corren con el agente `constructor`. Lo que escribas después del nombre de
 |---|---|---|
 | 0. Preparar | Si no hay git, te propone `git init` y un primer commit antes de nada | |
 | 1. Inventario | Lenguajes y versiones, frameworks, carpetas, código de terceros copiado, cómo se corre hoy, si hay pruebas y CI. Te dice qué skills instalar | `AGENTS.md`, `arquitectura.md` (piezas y contexto), `trampas.md` |
-| 2. Módulos | Qué hace cada módulo (hasta 8 a la vez con `@explorador`), los flujos clave | `arquitectura.md` (contenedores y flujos), `producto.md`, `requerimientos.md` (un `RF` con estado `existe` por comportamiento) |
+| 2. Módulos | Qué hace cada módulo (hasta 8 a la vez con `@explorador`), quién usa a quién, las fronteras que hoy se cumplen y los flujos clave | `modulos.md` (el mapa), `arquitectura.md` (contenedores y flujos), `producto.md`, `requerimientos.md` (un `RF` con estado `existe` por comportamiento) |
 | 3. Datos | El esquema, leído de migraciones, SQL, modelos o de un volcado que le pases. **Nunca lee `.env` ni se conecta a producción** | `base-de-datos.md` con su `erDiagram` |
-| 4. Convenciones y deuda | Cómo se escribe código aquí, qué no cumple los principios (sobre todo seguridad), qué decisiones deja ver el código | `convenciones.md`, `deuda.md`, `decisiones.md` (marcadas "(inferida)"), `.bowser/inmutables`, `.bowser/verificacion` (te muestra el cambio) |
+| 4. Convenciones y deuda | Cómo se escribe código aquí (marcado **heredado**, con dónde no se cumple), qué no cumple los principios (sobre todo seguridad), qué decisiones deja ver el código | `convenciones.md`, `deuda.md`, `decisiones.md` (marcadas "(inferida)"), `.bowser/inmutables`, `.bowser/verificacion` (te muestra el cambio) |
 | 5. Entendimiento | Levanta el sistema en local con sus versiones reales y completa el `Makefile`. Te explica un flujo paso a paso y te pregunta las decisiones inferidas | Corrige la memoria con tus respuestas |
-| 6. Cerrar | `make verify`; `@revisor` comprueba al menos cinco afirmaciones contra el código | Resumen: qué es, cuántas funcionalidades, tablas y deudas graves |
+| 6. Cómo lo quieres | Te muestra las convenciones heredadas y te hace las preguntas de `.bowser/estandares.md` que el código no responde (idioma, nombres, cómo se llama cada capa, errores, carpetas), en una sola ronda y con su recomendación | `convenciones.md` (lo que apruebas pasa a **decidido**), `decisiones.md`, `deuda.md` (el código que no cumple lo decidido), `modulos.md` (fronteras nuevas) |
+| 7. Cerrar | `make verify`; `@revisor` comprueba al menos cinco afirmaciones contra el código | Resumen: qué es, cuántos módulos, funcionalidades, tablas y deudas graves, cuántas convenciones quedaron decididas |
 
-Lo que parece un error no se vuelve requisito: va a `deuda.md` o a "Preguntas abiertas". Si el sistema no arranca sin cambiar su código, no lo cambia: lo anota y te pregunta.
+Lo que parece un error no se vuelve requisito: va a `deuda.md` o a "Preguntas abiertas". Si el sistema no arranca sin cambiar su código, no lo cambia: lo anota y te pregunta. Lo que decidas en la pasada 6 no reescribe el código viejo: se ajusta cuando una funcionalidad toca cada archivo, en un commit `refactor:` aparte. Si el proyecto ya tiene memoria, no la reescribe: hace las pasadas que falten.
 
 ---
 

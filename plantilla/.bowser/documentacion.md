@@ -15,6 +15,8 @@ datos, y describen lo que ya hay. Desde ahí, cada funcionalidad parte de ellos 
 | ¿En qué orden se construye? | `docs/producto/roadmap.md` | `/bowser-idea` o `/bowser-roadmap`; `/bowser-close` actualiza el estado |
 | ¿Qué existe hoy? | `docs/memoria/producto.md` | `/bowser-close` |
 | ¿Cómo está construido? (piezas, flujos, diagramas) | `docs/memoria/arquitectura.md` | `/bowser-discover`; `/bowser-close` |
+| ¿Para qué sirve cada módulo y quién puede usar a quién? | `docs/memoria/modulos.md` | `/bowser-discover`; `/bowser-close` |
+| ¿Cómo se escribe código aquí? | `docs/memoria/convenciones.md` | `/bowser-discover` con `.bowser/estandares.md`; quien decide |
 | ¿Cómo son los datos? | `docs/memoria/base-de-datos.md` | `/bowser-discover`; `/bowser-close` |
 | ¿Por qué es así? | `docs/memoria/decisiones.md` | Quien decide, en el momento |
 | ¿Qué se pidió en un cambio concreto? | `docs/cambios/<nombre>.md` | `/bowser-feature` |
@@ -48,6 +50,7 @@ el documento se corrige en el mismo cambio.
 | Modelo de datos | `erDiagram` | `base-de-datos.md` | Si hay base de datos |
 | Secuencia de un flujo clave | `sequenceDiagram` | `arquitectura.md` o el cambio | Flujos con varias piezas, pagos o permisos |
 | Estados de una entidad | `stateDiagram-v2` | `arquitectura.md` o el cambio | Pedidos, solicitudes, cualquier cosa con ciclo de vida |
+| Quién usa a quién entre módulos | `flowchart` | `modulos.md` | Si hay más de un módulo |
 
 Un cambio grande que agrega piezas, tablas o un flujo nuevo trae sus diagramas en `docs/cambios/<nombre>.md`, y
 `/bowser-close` los pasa a `arquitectura.md` o `base-de-datos.md`.

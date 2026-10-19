@@ -78,6 +78,6 @@ Fuentes: el manual de PostgreSQL (postgresql.org/docs/current/) y la página "Do
 - El esquema, los archivos de cambio y los datos de ejemplo inventados sí van en git.
 
 ## Si el proyecto tiene sus propias convenciones
-- Esta página es el estándar. Si el proyecto tiene sus convenciones en `docs/memoria/convenciones.md`, **en nombres, estructura, patrones y herramientas manda esa**, para que lo nuevo se parezca a lo que ya hay. Lo que ese archivo no diga se hace como dice esta página.
+- Esta página es el estándar. Si el proyecto tiene sus convenciones en `docs/memoria/convenciones.md`, **en nombres, estructura, patrones y herramientas manda esa**, para que lo nuevo se parezca a lo que ya hay. Lo que ese archivo no diga se hace como dice esta página. Una regla **decidida** manda siempre; si sobre un tema solo hay una **heredada** y esta página recomienda otra cosa, síguela pero dilo en el plan, para que la persona decida.
 - **Seguridad**, los parámetros en las consultas y el archivo de cambio con su reverso no admiten excepción. Si cumplirlos exige cambiar algo que tu tarea no cubre, detente y avisa.
 - No renombres ni reorganices lo que tu tarea no toca. Lo que encuentres fuera del estándar va en `docs/memoria/deuda.md`.

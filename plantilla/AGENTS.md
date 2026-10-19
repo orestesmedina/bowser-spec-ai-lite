@@ -42,6 +42,7 @@ Lo que el código no dice está en `docs/memoria/`. Lee solo lo que necesites pa
 | `docs/producto/requerimientos.md` | la tarea agregue o cambie un comportamiento: qué se pidió, para quién y sus criterios |
 | `producto.md` | necesites saber qué funcionalidades existen y qué hace cada una |
 | `arquitectura.md` | vayas a tocar más de un módulo o no sepas dónde va algo |
+| `modulos.md` | vayas a tocar un módulo que no conoces o agregar uno: para qué sirve cada uno y quién puede usar a quién |
 | `base-de-datos.md` | la tarea toque tablas, consultas o migraciones |
 | `decisiones.md` | vayas a cambiar algo que parece raro: puede tener un motivo |
 | `trampas.md` | antes de levantar, probar o desplegar |

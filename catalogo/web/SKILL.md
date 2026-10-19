@@ -64,6 +64,6 @@ Para interfaces donde el navegador recibe HTML ya armado (por el servidor o escr
 - Los archivos que suben las personas que usan el sitio no son código: fuera de git.
 
 ## Si el proyecto tiene sus propias convenciones
-- Esta página es el estándar. Si el proyecto tiene sus convenciones en `docs/memoria/convenciones.md`, **en nombres, estructura, patrones y bibliotecas manda esa**, para que una pantalla nueva se parezca a las que ya hay. Lo que ese archivo no diga se hace como dice esta página.
+- Esta página es el estándar. Si el proyecto tiene sus convenciones en `docs/memoria/convenciones.md`, **en nombres, estructura, patrones y bibliotecas manda esa**, para que una pantalla nueva se parezca a las que ya hay. Lo que ese archivo no diga se hace como dice esta página. Una regla **decidida** manda siempre; si sobre un tema solo hay una **heredada** y esta página recomienda otra cosa, síguela pero dilo en el plan, para que la persona decida.
 - Las reglas de **Seguridad** no admiten excepción. Si cumplirlas exige cambiar algo que tu tarea no cubre, detente y avisa.
 - No reescribas lo que tu tarea no toca. Lo que encuentres fuera del estándar va en `docs/memoria/deuda.md`.

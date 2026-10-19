@@ -2,6 +2,23 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: [SemVer](https://semver.org/lang/es/).
 
+## [0.13.0] - 2026-10-19
+
+### Agregado
+- **`/bowser-discover` pregunta cómo quieres el proyecto de aquí en adelante** (pasada 6, nueva). Antes solo describía el código tal como estaba, y sus malos hábitos se volvían regla. Ahora te muestra las convenciones que encontró, con dónde no se cumplen, y te hace en una sola ronda las preguntas que el código no responde: idioma del código y de los errores, nombres, cómo se llama cada capa, estructura de carpetas, errores, base de datos, pruebas y qué hacer con el código viejo. Cada pregunta trae su recomendación; puedes responder solo algunas. Para correr solo esta pasada en un proyecto que ya tiene memoria: `/bowser-discover estandares`.
+- **`.bowser/estandares.md`**: esas preguntas, iguales para cualquier lenguaje. Lo propio de cada tecnología lo sigue poniendo su skill.
+- **`docs/memoria/modulos.md`** (semilla nueva): el mapa del sistema. Para cada módulo, para qué sirve, sus piezas principales, quién lo llama y a quién llama, qué datos toca y qué ofrece hacia afuera; arriba, el diagrama de quién usa a quién y las **reglas** (las fronteras). Lo escribe la pasada 2 de `/bowser-discover` y lo mantiene `/bowser-close`. Si hay varios servicios, un índice y un archivo por servicio.
+
+### Cambiado
+- **`convenciones.md` dice de dónde sale cada regla**: *decidida* (la aprobaste tú, con su `D-NN`) o *heredada* (se vio en el código). El código nuevo sigue las decididas aunque el de alrededor no lo haga; poner al día el viejo va en un commit `refactor:` aparte cuando una funcionalidad toca ese archivo. Las skills ceden ante una regla decidida y, si solo hay una heredada que contradice la skill, el agente lo dice en el plan.
+- **`@revisor` revisa el diseño**: romper una frontera de `modulos.md` o un contrato sin que el plan lo diga es bloqueante; no seguir una convención decidida en código nuevo, importante.
+- **`/bowser-feature`**: el plan dice qué módulos, tablas y contratos toca, y agregar un módulo o cruzar una frontera hace grande el cambio.
+- `@explorador` dice para qué sirve cada pieza y con qué otras partes del proyecto habla.
+- `/bowser-discover` no reescribe una memoria que ya existe: hace solo las pasadas que falten.
+
+### Al actualizar
+- `modulos.md` llega a tu proyecto solo si no lo tenías; tu `convenciones.md` no cambia. Para marcar tus reglas como decididas o heredadas y crear el mapa, corre `/bowser-discover estandares` y `/bowser-discover modulos`.
+
 ## [0.12.4] - 2026-10-18
 
 ### Corregido

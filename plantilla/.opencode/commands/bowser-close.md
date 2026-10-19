@@ -14,7 +14,8 @@ Notas de la persona (puede venir vacío): $ARGUMENTS
    - `arquitectura.md`: piezas o flujos nuevos, con sus diagramas (si el plan los traía, se pasan aquí).
    - `decisiones.md`: lo que se decidió en la conversación y alguien podría querer deshacer sin saber el motivo.
    - `trampas.md`: lo que hizo perder tiempo en esta sesión.
-   - `deuda.md`: lo que se encontró y no se arregló.
+   - `modulos.md`: un módulo nuevo, una pieza principal nueva, una dependencia o una frontera que cambió.
+   - `deuda.md`: lo que se encontró y no se arregló, y la deuda de convenciones que este cambio pagó (se borra su línea).
    Sigue `.bowser/documentacion.md`. No repitas lo que el código ya dice. Si un archivo pasa de ~7 000 caracteres, resume o pártelo.
    Después corre `make verify` otra vez: cada aviso `⚠ memoria:` se resuelve actualizando ese archivo, o se explica a la persona por qué no hace falta.
 2. **Costo.** Ejecuta `make cost` y toma el total de tokens y el costo equivalente.

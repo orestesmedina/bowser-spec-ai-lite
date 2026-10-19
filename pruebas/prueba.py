@@ -420,8 +420,22 @@ def prueba_verificacion(base: Path) -> None:
     caso("/bowser-discover lleva su avance para /bowser-resume", "docs/cambios/descubrimiento.md" in dc and "/bowser-resume" in dc)
     for doc in ["AGENTS.md", "docs/memoria/arquitectura.md", "docs/memoria/producto.md", "docs/producto/requerimientos.md",
                 "docs/memoria/base-de-datos.md", "docs/memoria/convenciones.md", "docs/memoria/deuda.md", "docs/memoria/decisiones.md",
-                "docs/memoria/trampas.md", ".bowser/inmutables", ".bowser/verificacion"]:
+                "docs/memoria/trampas.md", "docs/memoria/modulos.md", ".bowser/inmutables", ".bowser/verificacion"]:
         caso(f"/bowser-discover escribe {doc} y existe su plantilla", doc.split("/")[-1] in dc and (p / doc).exists())
+    est = (p / ".bowser/estandares.md").read_text()
+    caso("instala las preguntas de estándares", "Idioma del código" in est and "Nombre de cada capa" in est and "El código que ya existe" in est)
+    caso("las preguntas de estándares valen para cualquier lenguaje", "cualquier lenguaje" in est)
+    caso("/bowser-discover pregunta cómo lo quiere la persona", "## 6. Cómo lo quieres de aquí en adelante" in dc and ".bowser/estandares.md" in dc)
+    caso("/bowser-discover escribe las convenciones como heredadas y luego decididas", "(heredada)" in dc and "(decidida, D-NN)" in dc)
+    caso("/bowser-discover no reescribe una memoria que ya existe", "no la reescribas" in dc)
+    conv = (p / "docs/memoria/convenciones.md").read_text()
+    caso("la plantilla de convenciones distingue decidida y heredada", "(decidida" in conv and "(heredada)" in conv)
+    caso("AGENTS.md dice cuándo leer modulos.md", "`modulos.md`" in (p / "AGENTS.md").read_text())
+    caso("el revisor revisa las fronteras de modulos.md", "`modulos.md`" in (p / ".opencode/agents/revisor.md").read_text())
+    caso("el plan de /bowser-feature dice qué diseño toca", "Diseño que toca" in (p / ".opencode/commands/bowser-feature.md").read_text())
+    caso("/bowser-close mantiene modulos.md", "`modulos.md`" in (p / ".opencode/commands/bowser-close.md").read_text())
+    faltan = [d.name for d in sorted((KIT / "catalogo").iterdir()) if "**decidida**" not in (d / "SKILL.md").read_text(encoding="utf-8")]
+    caso("cada skill cede ante una convención decidida", not faltan, str(faltan))
     caso("/bowser-feature escribe pruebas de caracterización", "pruebas de caracterización" in (p / ".opencode/commands/bowser-feature.md").read_text())
     caso("instala /bowser-resume", "Estado" in (p / ".opencode/commands/bowser-resume.md").read_text())
     caso("el plan de /bowser-feature lleva su Estado", "/bowser-resume" in (p / ".opencode/commands/bowser-feature.md").read_text())

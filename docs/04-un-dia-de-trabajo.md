@@ -125,7 +125,7 @@ opencode
 /bowser-discover
 ```
 
-En la rama `docs/descubrimiento` recorre el sistema en cinco pasadas, con un commit por pasada: qué tecnologías usa y cómo se corre; qué hace cada módulo; el esquema de la base de datos (de las migraciones, o de un volcado que le pases); las convenciones y la deuda (sobre todo de seguridad); y una prueba de entendimiento: lo levanta en local y te explica un flujo, de la pantalla a la base de datos, para que lo confirmes. Si la sesión se alarga, para al final de una pasada y la siguiente sesión sigue donde quedó.
+En la rama `docs/descubrimiento` recorre el sistema en seis pasadas, con un commit por pasada: qué tecnologías usa y cómo se corre; qué hace cada módulo y quién usa a quién (el mapa de `modulos.md`); el esquema de la base de datos (de las migraciones, o de un volcado que le pases); las convenciones y la deuda (sobre todo de seguridad); una prueba de entendimiento: lo levanta en local y te explica un flujo, de la pantalla a la base de datos, para que lo confirmes; y **cómo lo quieres de aquí en adelante**: te muestra las convenciones que encontró y te pregunta cuáles se quedan y cuáles cambian (idioma del código, nombres, cómo se llama cada capa, errores, carpetas). Si la sesión se alarga, para al final de una pasada y la siguiente sesión sigue donde quedó.
 
 Desde ahí trabajas con `/bowser-feature` como en un proyecto nuevo. La diferencia: antes de cambiar código que no tiene pruebas, el agente escribe primero sus **pruebas de caracterización**, que fijan cómo funciona hoy, para que el cambio no rompa lo que nadie sabía que existía.
 
