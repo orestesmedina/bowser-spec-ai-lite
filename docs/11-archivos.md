@@ -20,7 +20,7 @@ Si una versión nueva del kit deja de usar un archivo suyo (por ejemplo, un coma
 | `.opencode/skills/<nombre>/SKILL.md` | Las [skills](09-skills.md) que elegiste |
 | `.bowser/principios.md` | Reglas de seguridad, calidad y datos para cualquier proyecto |
 | `.bowser/documentacion.md` | El [formato](07-memoria.md#el-formato) de requisitos, diagramas y decisiones |
-| `.bowser/estandares.md` | Las preguntas de estándares (idioma, nombres, capas, errores, carpetas) que `/bowser-discover` le hace a la persona |
+| `.bowser/estandares.md` | Las preguntas de estándares (idioma, nombres, capas, errores, carpetas) que `/bowser-idea` y `/bowser-discover` le hacen a la persona |
 | `.bowser/verificar.py` | `make verify` |
 | `.bowser/costo.py` | `make cost` |
 | `.githooks/pre-commit`, `commit-msg`, `pre-push` | Los [hooks de git](08-controles.md#hooks-de-git) |

@@ -406,6 +406,14 @@ def prueba_verificacion(base: Path) -> None:
     for doc in ["docs/producto/requerimientos.md", "docs/memoria/arquitectura.md", "docs/memoria/decisiones.md", "docs/producto/roadmap.md", "AGENTS.md"]:
         caso(f"/bowser-idea escribe {doc} y existe su plantilla", doc in idea and (p / doc).exists())
     caso("/bowser-idea pone la base mínima como #1", "base mínima" in idea and "#1" in idea)
+    caso("/bowser-idea pregunta los estándares", "## 2. Estándares" in idea and ".bowser/estandares.md" in idea)
+    caso("/bowser-idea diseña datos, módulos y contratos antes del roadmap",
+         idea.index("## 3. Diseño") < idea.index("roadmap.md") and all(t in idea for t in ("erDiagram", "fronteras", "**Contratos**")))
+    caso("/bowser-idea pide el sí de cada parte del diseño", "por partes" in idea and "espera el sí de cada una" in idea)
+    for doc in ["docs/memoria/convenciones.md", "docs/memoria/base-de-datos.md", "docs/memoria/modulos.md"]:
+        caso(f"/bowser-idea escribe {doc} y existe su plantilla", doc in idea and (p / doc).exists())
+    caso("base-de-datos.md admite tablas diseñadas", "diseñada" in (p / "docs/memoria/base-de-datos.md").read_text()
+         and "diseñada" in idea and "`existe`" in (p / ".opencode/commands/bowser-close.md").read_text())
     rm = (p / ".opencode/commands/bowser-roadmap.md").read_text()
     caso("instala /bowser-roadmap", "agent: constructor" in rm and "$ARGUMENTS" in rm)
     caso("/bowser-roadmap informa sin tocar nada y solo replanea si se pide", "sin modificar nada" in rm and "terminas aquí" in rm)

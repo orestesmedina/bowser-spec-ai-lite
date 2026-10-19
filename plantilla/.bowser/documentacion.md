@@ -15,9 +15,9 @@ datos, y describen lo que ya hay. Desde ahí, cada funcionalidad parte de ellos 
 | ¿En qué orden se construye? | `docs/producto/roadmap.md` | `/bowser-idea` o `/bowser-roadmap`; `/bowser-close` actualiza el estado |
 | ¿Qué existe hoy? | `docs/memoria/producto.md` | `/bowser-close` |
 | ¿Cómo está construido? (piezas, flujos, diagramas) | `docs/memoria/arquitectura.md` | `/bowser-discover`; `/bowser-close` |
-| ¿Para qué sirve cada módulo y quién puede usar a quién? | `docs/memoria/modulos.md` | `/bowser-discover`; `/bowser-close` |
-| ¿Cómo se escribe código aquí? | `docs/memoria/convenciones.md` | `/bowser-discover` con `.bowser/estandares.md`; quien decide |
-| ¿Cómo son los datos? | `docs/memoria/base-de-datos.md` | `/bowser-discover`; `/bowser-close` |
+| ¿Para qué sirve cada módulo y quién puede usar a quién? | `docs/memoria/modulos.md` | `/bowser-idea` (diseño) o `/bowser-discover`; `/bowser-close` |
+| ¿Cómo se escribe código aquí? | `docs/memoria/convenciones.md` | `/bowser-idea` o `/bowser-discover`, con `.bowser/estandares.md`; quien decide |
+| ¿Cómo son los datos? | `docs/memoria/base-de-datos.md` | `/bowser-idea` (diseño) o `/bowser-discover`; `/bowser-close` |
 | ¿Por qué es así? | `docs/memoria/decisiones.md` | Quien decide, en el momento |
 | ¿Qué se pidió en un cambio concreto? | `docs/cambios/<nombre>.md` | `/bowser-feature` |
 

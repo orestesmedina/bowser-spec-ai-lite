@@ -10,7 +10,7 @@ Notas de la persona (puede venir vacío): $ARGUMENTS
 1. **Memoria.** Revisa qué dejó vieja este cambio y actualiza solo eso en `docs/memoria/`:
    - `docs/producto/requerimientos.md`: los requisitos de este cambio pasan a `existe`; los nuevos se agregan con sus criterios.
    - `producto.md`: la funcionalidad nueva o lo que cambió de una existente.
-   - `base-de-datos.md`: tablas, columnas, procedimientos o índices nuevos o cambiados (léelos del esquema real).
+   - `base-de-datos.md`: tablas, columnas, procedimientos o índices nuevos o cambiados (léelos del esquema real). Una tabla que estaba `diseñada` y ya tiene su migración pasa a `existe`; si se hizo distinta del diseño, dilo en `decisiones.md`.
    - `arquitectura.md`: piezas o flujos nuevos, con sus diagramas (si el plan los traía, se pasan aquí).
    - `decisiones.md`: lo que se decidió en la conversación y alguien podría querer deshacer sin saber el motivo.
    - `trampas.md`: lo que hizo perder tiempo en esta sesión.
