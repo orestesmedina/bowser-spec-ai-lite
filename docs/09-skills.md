@@ -30,7 +30,7 @@ Si no pones `--skills`, el instalador mira el proyecto y te sugiere las que pare
 ## Qué manda si chocan
 
 1. `.bowser/principios.md` (seguridad, calidad, datos) manda siempre.
-2. `docs/memoria/convenciones.md` (cómo se hace en **este** proyecto) manda sobre la skill, salvo en seguridad. Si tu proyecto nombra las tablas en singular y la skill dice plural, se sigue el proyecto.
+2. `docs/memoria/convenciones.md` (cómo se hace en **este** proyecto) manda sobre la skill, salvo en seguridad. Si tu proyecto nombra las tablas en singular y la skill dice plural, se sigue el proyecto. Cada regla dice si la **decidiste** tú o si es **heredada** (se vio en el código y nadie la confirmó): una heredada se sigue igual, pero si la skill recomienda otra cosa, el agente lo dice en el plan para que decidas.
 3. La skill, para todo lo que el proyecto no decidió.
 
 ## Skills propias

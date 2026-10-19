@@ -71,7 +71,7 @@ Luego, en OpenCode:
 /bowser-discover
 ```
 
-Hace ingeniería inversa del proyecto en cinco pasadas (inventario, módulos, datos, convenciones y deuda, y una prueba de entendimiento) y deja la memoria lista para trabajar. No cambia el código del producto. Detalle en [Comandos: /bowser-discover](05-comandos.md#bowser-discover).
+Hace ingeniería inversa del proyecto en seis pasadas (inventario, módulos, datos, convenciones y deuda, una prueba de entendimiento y los estándares que quieres de aquí en adelante) y deja la memoria lista para trabajar. No cambia el código del producto. Detalle en [Comandos: /bowser-discover](05-comandos.md#bowser-discover).
 
 Si prefieres hacerlo a mano o por partes, esto es lo mínimo antes de la primera funcionalidad:
 

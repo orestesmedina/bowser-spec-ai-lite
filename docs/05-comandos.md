@@ -22,11 +22,13 @@ Todos corren con el agente `constructor`. Lo que escribas después del nombre de
 
 **Qué hace:**
 1. **Entrevista**: como máximo 3 rondas de 5 preguntas. Cada una trae su recomendación. Lo que puede decidir con un supuesto razonable, lo decide y te lo dice. Necesita saber: el problema y para quién, cómo sabrán que funciona, lo mínimo que ya sirve, qué no incluye, qué datos guarda (sobre todo personales o pagos), las restricciones y la tecnología.
-2. **Escribe**, siguiendo el [estándar de documentación](07-memoria.md#el-formato): requerimientos, arquitectura (contexto y contenedores), decisiones y roadmap. La funcionalidad #1 del roadmap es siempre la **base mínima**: el proyecto corre, tiene una prueba y su `Makefile` está completo, sin funcionalidades de negocio. Después vienen rebanadas que se pueden probar de punta a punta. Lo que toca autenticación, permisos, pagos o datos personales queda marcado como grande.
-3. **Te pide aprobación** con un resumen de no más de 20 líneas. No sigue sin tu sí.
-4. **Commitea** y te dice qué skills instalar y cómo empezar la #1.
+2. **Estándares**: las preguntas de `.bowser/estandares.md` en una ronda (idioma del código y de los textos, nombres, cómo se llama cada capa, estructura de carpetas), con la recomendación de las skills de la pila. Espera tu sí.
+3. **Diseño**, solo de la primera versión y **por partes**, con tu sí en cada una: el modelo de datos (`erDiagram`, tablas, llaves, índices y qué va a crecer), los módulos con sus fronteras (quién no puede usar a quién) y los contratos principales (qué recibe y qué devuelve cada ruta o interfaz). Es lo que vas a necesitar entender cuando el código exista: decidirlo antes evita que el agente lo decida por el camino más corto en cada funcionalidad.
+4. **Escribe**, siguiendo el [estándar de documentación](07-memoria.md#el-formato): requerimientos, convenciones (decididas), base de datos (tablas en estado `diseñada`), módulos, arquitectura (contexto y contenedores), decisiones y roadmap. Cada funcionalidad del roadmap dice qué tablas, módulos y contratos construye. La #1 es siempre la **base mínima**: el proyecto corre, tiene una prueba, su `Makefile` está completo y tiene el árbol de carpetas acordado, sin funcionalidades de negocio. Después vienen rebanadas que se pueden probar de punta a punta. Lo que toca autenticación, permisos, pagos o datos personales queda marcado como grande.
+5. **Te pide aprobación** con un resumen de no más de 20 líneas. No sigue sin tu sí.
+6. **Commitea** y te dice qué skills instalar y cómo empezar la #1.
 
-**Deja escrito:** `docs/producto/requerimientos.md`, `docs/producto/roadmap.md`, `docs/memoria/arquitectura.md`, `docs/memoria/decisiones.md` y parte de `AGENTS.md`.
+**Deja escrito:** `docs/producto/requerimientos.md`, `docs/producto/roadmap.md`, `docs/memoria/convenciones.md`, `docs/memoria/base-de-datos.md`, `docs/memoria/modulos.md`, `docs/memoria/arquitectura.md`, `docs/memoria/decisiones.md` y parte de `AGENTS.md`. Desde ahí, `@revisor` bloquea un cambio que rompa una frontera del diseño sin decirlo en su plan.
 
 ---
 
@@ -47,13 +49,14 @@ Todos corren con el agente `constructor`. Lo que escribas después del nombre de
 |---|---|---|
 | 0. Preparar | Si no hay git, te propone `git init` y un primer commit antes de nada | |
 | 1. Inventario | Lenguajes y versiones, frameworks, carpetas, código de terceros copiado, cómo se corre hoy, si hay pruebas y CI. Te dice qué skills instalar | `AGENTS.md`, `arquitectura.md` (piezas y contexto), `trampas.md` |
-| 2. Módulos | Qué hace cada módulo (hasta 8 a la vez con `@explorador`), los flujos clave | `arquitectura.md` (contenedores y flujos), `producto.md`, `requerimientos.md` (un `RF` con estado `existe` por comportamiento) |
+| 2. Módulos | Qué hace cada módulo (hasta 8 a la vez con `@explorador`), quién usa a quién, las fronteras que hoy se cumplen y los flujos clave | `modulos.md` (el mapa), `arquitectura.md` (contenedores y flujos), `producto.md`, `requerimientos.md` (un `RF` con estado `existe` por comportamiento) |
 | 3. Datos | El esquema, leído de migraciones, SQL, modelos o de un volcado que le pases. **Nunca lee `.env` ni se conecta a producción** | `base-de-datos.md` con su `erDiagram` |
-| 4. Convenciones y deuda | Cómo se escribe código aquí, qué no cumple los principios (sobre todo seguridad), qué decisiones deja ver el código | `convenciones.md`, `deuda.md`, `decisiones.md` (marcadas "(inferida)"), `.bowser/inmutables`, `.bowser/verificacion` (te muestra el cambio) |
+| 4. Convenciones y deuda | Cómo se escribe código aquí (marcado **heredado**, con dónde no se cumple), qué no cumple los principios (sobre todo seguridad), qué decisiones deja ver el código | `convenciones.md`, `deuda.md`, `decisiones.md` (marcadas "(inferida)"), `.bowser/inmutables`, `.bowser/verificacion` (te muestra el cambio) |
 | 5. Entendimiento | Levanta el sistema en local con sus versiones reales y completa el `Makefile`. Te explica un flujo paso a paso y te pregunta las decisiones inferidas | Corrige la memoria con tus respuestas |
-| 6. Cerrar | `make verify`; `@revisor` comprueba al menos cinco afirmaciones contra el código | Resumen: qué es, cuántas funcionalidades, tablas y deudas graves |
+| 6. Cómo lo quieres | Te muestra las convenciones heredadas y te hace las preguntas de `.bowser/estandares.md` que el código no responde (idioma, nombres, cómo se llama cada capa, errores, carpetas), en una sola ronda y con su recomendación | `convenciones.md` (lo que apruebas pasa a **decidido**), `decisiones.md`, `deuda.md` (el código que no cumple lo decidido), `modulos.md` (fronteras nuevas) |
+| 7. Cerrar | `make verify`; `@revisor` comprueba al menos cinco afirmaciones contra el código | Resumen: qué es, cuántos módulos, funcionalidades, tablas y deudas graves, cuántas convenciones quedaron decididas |
 
-Lo que parece un error no se vuelve requisito: va a `deuda.md` o a "Preguntas abiertas". Si el sistema no arranca sin cambiar su código, no lo cambia: lo anota y te pregunta.
+Lo que parece un error no se vuelve requisito: va a `deuda.md` o a "Preguntas abiertas". Si el sistema no arranca sin cambiar su código, no lo cambia: lo anota y te pregunta. Lo que decidas en la pasada 6 no reescribe el código viejo: se ajusta cuando una funcionalidad toca cada archivo, en un commit `refactor:` aparte. Si el proyecto ya tiene memoria, no la reescribe: hace las pasadas que falten.
 
 ---
 

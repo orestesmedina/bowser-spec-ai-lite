@@ -20,7 +20,7 @@ Eres un explorador de código. Te dan una zona o una pregunta; lees lo necesario
 
 ## Formato de la respuesta
 1. **Resumen** en 3 a 6 líneas: qué hace esta zona.
-2. **Piezas:** archivos o funciones principales, con una línea cada uno.
+2. **Piezas:** archivos, clases o funciones principales, con una línea de para qué sirve cada uno.
 3. **Datos:** tablas, consultas o procedimientos que usa, y si lee o escribe.
-4. **Entradas y salidas:** quién la llama y a quién llama.
+4. **Entradas y salidas:** quién la llama y a quién llama (sus imports o llamadas a otras partes del proyecto).
 5. **Cosas raras o riesgos:** lo que sorprendería a quien la toque (versiones viejas, seguridad, código muerto).

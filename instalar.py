@@ -48,6 +48,7 @@ DEL_KIT = [
     ".bowser/costo.py",
     ".bowser/principios.md",
     ".bowser/documentacion.md",
+    ".bowser/estandares.md",
     ".github/workflows/bowser.yml",
     "bowser.mk",
 ]
@@ -62,6 +63,7 @@ SEMILLAS = [
     ".bowser/versiones",
     "docs/memoria/producto.md",
     "docs/memoria/arquitectura.md",
+    "docs/memoria/modulos.md",
     "docs/memoria/base-de-datos.md",
     "docs/memoria/decisiones.md",
     "docs/memoria/trampas.md",

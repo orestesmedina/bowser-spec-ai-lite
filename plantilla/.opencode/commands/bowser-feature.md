@@ -11,7 +11,7 @@ Lee lo necesario de `AGENTS.md`, `docs/memoria/` y el código para proponer un t
 
 - **Pequeño** (un error, un texto, un ajuste que no cambia datos ni permisos): vas directo al paso 3.
 - **Normal**: escribes un plan corto y sigues.
-- **Grande o riesgoso** (datos de clientes, pagos, permisos, seguridad, cambios de esquema grandes, reconstruir un módulo): escribes spec y plan, y **esperas su aprobación** antes de programar.
+- **Grande o riesgoso** (datos de clientes, pagos, permisos, seguridad, cambios de esquema grandes, reconstruir un módulo, agregar un módulo o cruzar una frontera de las **Reglas** de `docs/memoria/modulos.md`): escribes spec y plan, y **esperas su aprobación** antes de programar.
 
 Si el cambio va a tocar un archivo de la sección `[riesgo]` de `.bowser/verificacion` (migraciones, autenticación, permisos, pagos…), es grande aunque parezca pequeño: `make verify` lo exige.
 
@@ -22,6 +22,7 @@ Crea la rama `feat/<nombre-corto>` (o `fix/…`) desde la rama principal actuali
 
 - **Qué se pide**, en palabras de la persona, y qué queda fuera. Qué requisitos de `docs/producto/requerimientos.md` cubre (`RF-NN`) o cuáles agrega, con sus criterios de aceptación.
 - **Cómo se hace:** archivos o módulos que cambian, datos que cambian (tablas, columnas, migraciones) y por qué así.
+- **Diseño que toca:** qué módulos de `docs/memoria/modulos.md`, tablas y contratos cambian. Si agrega un módulo, cruza una frontera o cambia un contrato que otro usa, dilo aquí: el cambio es grande.
 - **Cómo se comprueba:** qué pruebas y qué se verá funcionando.
 - (Grande) **Diagramas** de lo nuevo (piezas, tablas, flujo o estados), en Mermaid según `.bowser/documentacion.md`.
 - (Grande) **Riesgos** y cómo se revierte.
@@ -30,7 +31,7 @@ Crea la rama `feat/<nombre-corto>` (o `fix/…`) desde la rama principal actuali
 En un cambio normal muestras el plan en 5 a 10 líneas y sigues, salvo que la persona te frene. En uno grande te detienes hasta que diga que sí.
 
 ## 3. Construir
-Sigue "Cómo trabajas" de tus instrucciones: prueba primero cuando puedas, corre la prueba puntual mientras trabajas, commits pequeños. En un cambio pequeño la rama es `fix/<nombre-corto>`, también desde la rama principal actualizada, y el plan no hace falta.
+Sigue "Cómo trabajas" de tus instrucciones: prueba primero cuando puedas, corre la prueba puntual mientras trabajas, commits pequeños. El código nuevo sigue las convenciones **decididas** de `docs/memoria/convenciones.md` aunque el de alrededor no lo haga; poner al día el código viejo de los archivos que tocas va en un commit `refactor:` aparte, nunca mezclado con el cambio de comportamiento. En un cambio pequeño la rama es `fix/<nombre-corto>`, también desde la rama principal actualizada, y el plan no hace falta.
 
 **Código existente sin pruebas:** antes de cambiarlo, escribe sus **pruebas de caracterización**: fijan cómo se comporta hoy, aunque parezca raro o equivocado, con los casos que el cambio puede afectar. Van en su propio commit (`test: caracteriza <módulo>`), antes del cambio, y tienen que pasar sin tocar el código. Si una muestra un comportamiento que parece un error, no lo corrijas de paso: anótalo en `deuda.md` y pregunta. Al reconstruir un módulo entero, estas pruebas son las que dicen que el resto del sistema no notó la diferencia: se reemplaza por partes, cada parte con las pruebas en verde.
 

@@ -92,6 +92,6 @@ Los que el proyecto usa de verdad están en su `Makefile` (`make test`, `make li
 - `go.mod` y `go.sum` sí van en git, siempre (go.dev/ref/mod). `vendor/` va en git solo si el proyecto decidió versionar sus dependencias.
 
 ## Si el proyecto tiene sus propias convenciones
-- Esta página es el estándar. Si el proyecto tiene sus convenciones en `docs/memoria/convenciones.md`, **en nombres, estructura, patrones y bibliotecas manda esa**, para que el código nuevo se parezca al que ya hay. Lo que ese archivo no diga se hace como dice esta página.
+- Esta página es el estándar. Si el proyecto tiene sus convenciones en `docs/memoria/convenciones.md`, **en nombres, estructura, patrones y bibliotecas manda esa**, para que el código nuevo se parezca al que ya hay. Lo que ese archivo no diga se hace como dice esta página. Una regla **decidida** manda siempre; si sobre un tema solo hay una **heredada** y esta página recomienda otra cosa, síguela pero dilo en el plan, para que la persona decida.
 - **Seguridad** y los parámetros en las consultas no admiten excepción. Si cumplirlos exige cambiar algo que tu tarea no cubre, detente y avisa.
 - No reformatees ni reorganices lo que tu tarea no toca. Lo que encuentres fuera del estándar va en `docs/memoria/deuda.md`.

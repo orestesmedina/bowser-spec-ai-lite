@@ -40,9 +40,14 @@ opencode
 /bowser-idea una app para que los talleres agenden citas y avisen al cliente cuando el auto está listo
 ```
 
-El agente pregunta en rondas cortas: quién la usa (el dueño del taller, el mecánico, el cliente), qué es lo mínimo que ya sirve, si se guardan datos personales, dónde va a correr, qué tecnología. Cada pregunta trae su recomendación. Con tus respuestas escribe:
+El agente pregunta en rondas cortas: quién la usa (el dueño del taller, el mecánico, el cliente), qué es lo mínimo que ya sirve, si se guardan datos personales, dónde va a correr, qué tecnología. Cada pregunta trae su recomendación.
+
+Después te pregunta los estándares (código en inglés o en español, cómo se llama cada capa, cómo se organizan las carpetas) y te muestra el diseño por partes, para que lo apruebes antes de que exista una línea de código: las tablas (`talleres`, `citas`, `clientes`) con su diagrama, los módulos (`agenda`, `avisos`) y quién puede usar a quién, y las rutas principales con lo que reciben y devuelven. Aquí es donde corriges ("las citas van a crecer mucho: separemos el histórico").
+
+Con todo eso escribe:
 
 - `docs/producto/requerimientos.md`: la visión, los roles y requisitos como `RF-03 El cliente reserva una cita` con criterios *Dado / Cuando / Entonces*.
+- `docs/memoria/convenciones.md`, `base-de-datos.md` y `modulos.md`: los estándares y el diseño que aprobaste.
 - `docs/memoria/arquitectura.md`: el diagrama de contexto y de contenedores.
 - `docs/memoria/decisiones.md`: por qué Go y PostgreSQL, por qué sin app móvil en la primera versión.
 - `docs/producto/roadmap.md`: #1 base mínima, #2 agenda del taller, #3 reserva del cliente…
@@ -125,7 +130,7 @@ opencode
 /bowser-discover
 ```
 
-En la rama `docs/descubrimiento` recorre el sistema en cinco pasadas, con un commit por pasada: qué tecnologías usa y cómo se corre; qué hace cada módulo; el esquema de la base de datos (de las migraciones, o de un volcado que le pases); las convenciones y la deuda (sobre todo de seguridad); y una prueba de entendimiento: lo levanta en local y te explica un flujo, de la pantalla a la base de datos, para que lo confirmes. Si la sesión se alarga, para al final de una pasada y la siguiente sesión sigue donde quedó.
+En la rama `docs/descubrimiento` recorre el sistema en seis pasadas, con un commit por pasada: qué tecnologías usa y cómo se corre; qué hace cada módulo y quién usa a quién (el mapa de `modulos.md`); el esquema de la base de datos (de las migraciones, o de un volcado que le pases); las convenciones y la deuda (sobre todo de seguridad); una prueba de entendimiento: lo levanta en local y te explica un flujo, de la pantalla a la base de datos, para que lo confirmes; y **cómo lo quieres de aquí en adelante**: te muestra las convenciones que encontró y te pregunta cuáles se quedan y cuáles cambian (idioma del código, nombres, cómo se llama cada capa, errores, carpetas). Si la sesión se alarga, para al final de una pasada y la siguiente sesión sigue donde quedó.
 
 Desde ahí trabajas con `/bowser-feature` como en un proyecto nuevo. La diferencia: antes de cambiar código que no tiene pruebas, el agente escribe primero sus **pruebas de caracterización**, que fijan cómo funciona hoy, para que el cambio no rompa lo que nadie sabía que existía.
 

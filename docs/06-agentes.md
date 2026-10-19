@@ -35,7 +35,8 @@ Revisa como un ingeniero senior que no escribió el cambio. Recibe el pedido (o 
 2. Principios y seguridad: inyección, validación en el servidor, escape, autorización, secretos, datos personales.
 3. Corrección: errores lógicos, errores ignorados, condiciones de carrera, consultas N+1.
 4. Pruebas: ¿prueban el comportamiento real? Puede correrlas.
-5. Convenciones y memoria: ¿sigue `convenciones.md`? ¿Deja vieja la memoria?
+5. Diseño: ¿respeta las reglas de `modulos.md` (quién puede usar a quién) y los contratos? Romper una frontera sin que el plan lo diga es bloqueante.
+6. Convenciones y memoria: ¿el código nuevo sigue las convenciones **decididas** de `convenciones.md`? ¿Deja vieja la memoria?
 
 Responde con un **veredicto** (APROBADO, APROBADO CON CAMBIOS MENORES o CAMBIOS NECESARIOS) y hallazgos en **Bloqueante**, **Importante** y **Sugerencia**, cada uno con archivo, línea y el cambio concreto. No puede editar archivos. `make verify` comprueba, en las sesiones de OpenCode, que el revisor realmente revisó la rama.
 

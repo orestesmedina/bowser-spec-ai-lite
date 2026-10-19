@@ -14,10 +14,11 @@ La memoria del proyecto es lo que el agente necesita saber y **el código no dic
 | ¿Qué se entregó y cuánto costó? | `docs/producto/historial.md` | `/bowser-close` | Se mide o se cotiza |
 | ¿Qué existe hoy? | `docs/memoria/producto.md` | `/bowser-close`, `/bowser-discover` | Necesita saber qué funcionalidades hay |
 | ¿Cómo está construido? | `docs/memoria/arquitectura.md` | `/bowser-discover`, `/bowser-close` | Va a tocar más de un módulo o no sabe dónde va algo |
-| ¿Cómo son los datos? | `docs/memoria/base-de-datos.md` | `/bowser-discover`, `/bowser-close` | La tarea toca tablas, consultas o migraciones |
+| ¿Para qué sirve cada módulo y quién puede usar a quién? | `docs/memoria/modulos.md` | `/bowser-idea` (diseño), `/bowser-discover`, `/bowser-close` | Va a tocar un módulo que no conoce o agregar uno |
+| ¿Cómo son los datos? | `docs/memoria/base-de-datos.md` | `/bowser-idea` (diseño), `/bowser-discover`, `/bowser-close` | La tarea toca tablas, consultas o migraciones |
 | ¿Por qué es así? | `docs/memoria/decisiones.md` | Quien decide, en el momento | Va a cambiar algo que parece raro |
 | ¿Qué hizo perder tiempo? | `docs/memoria/trampas.md` | `/bowser-close`, `/bowser-discover` | Antes de levantar, probar o desplegar |
-| ¿Cómo se escribe código aquí? | `docs/memoria/convenciones.md` | `/bowser-discover`, tú | Va a escribir código |
+| ¿Cómo se escribe código aquí? | `docs/memoria/convenciones.md` | `/bowser-idea` o `/bowser-discover` (con las preguntas de `.bowser/estandares.md`), tú | Va a escribir código |
 | ¿Qué está mal y no se arregló? | `docs/memoria/deuda.md` | Cualquier comando que la encuentre | Toca un módulo con deuda |
 | ¿Qué se pidió en un cambio concreto y en qué va? | `docs/cambios/<nombre>.md` | `/bowser-feature` | Retoma ese cambio |
 
@@ -53,8 +54,15 @@ Los estados son `planeado`, `en curso`, `existe` y `descartado`. Uno descartado 
 | Modelo de datos | `erDiagram` | `base-de-datos.md` |
 | Un flujo con varias piezas | `sequenceDiagram` | `arquitectura.md` o el plan del cambio |
 | Estados de algo con ciclo de vida | `stateDiagram-v2` | `arquitectura.md` o el plan del cambio |
+| Quién usa a quién entre módulos | `flowchart` | `modulos.md` |
 
 **Decisiones**: `D-NN`, la más reciente arriba, con fecha, contexto, qué se decidió, qué se descartó y por qué, su consecuencia y quién decidió. Una decisión reemplazada se marca "reemplazada por D-NN" y no se borra. Va una entrada por cada decisión que alguien podría querer deshacer sin conocer el motivo.
+
+**Módulos**: una sección por módulo con su propósito, sus piezas principales (una línea de para qué sirve cada una), quién lo llama y a quién llama, qué datos toca y qué ofrece hacia afuera. Arriba, el diagrama de quién usa a quién y las **Reglas**: las fronteras (por ejemplo, "solo `database` consulta la base"), cada una marcada si se cumple hoy o si es nueva. `@revisor` bloquea un cambio que rompa una frontera sin decirlo en el plan. Si hay varios servicios, un índice y un archivo por servicio.
+
+**Tablas diseñadas**: en un proyecto nuevo, `base-de-datos.md` empieza con el diseño que aprobaste en `/bowser-idea`, cada tabla en estado `diseñada`. La funcionalidad que crea su migración la pasa a `existe` y, si quedó distinta del diseño, lo anota en `decisiones.md`.
+
+**Convenciones**: cada regla dice su origen. **Decidida** (la aprobaste tú, con su `D-NN`): el código nuevo la sigue aunque el viejo haga otra cosa, y el viejo queda en `deuda.md` para ajustarlo al tocarlo. **Heredada** (se vio en el código y nadie la confirmó): se sigue mientras no haya una decidida. Lo que se decide está en `.bowser/estandares.md`, igual para cualquier lenguaje.
 
 **Cómo se escribe**: español claro para alguien que no estuvo en la conversación; lo que el código ya dice no se copia; un dato vive en un solo archivo y los demás lo enlazan; si un archivo pasa de ~7 000 caracteres, se resume o se parte.
 
