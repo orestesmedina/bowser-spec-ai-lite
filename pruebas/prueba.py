@@ -288,6 +288,63 @@ def prueba_costo(base: Path) -> None:
     caso("sin OpenCode falla con un mensaje claro", r.returncode != 0 and "opencode" in r.stderr, r.stderr)
 
 
+def prueba_primer_push(base: Path) -> None:
+    print("Primer push de un proyecto que todavía es solo documentos")
+    p = proyecto(base, "primer-push")
+    instalar(p)
+    (p / "docs/producto/idea.md").write_text("# La idea\n")
+    sh(["git", "add", "-A"], p)
+    commit(p, "docs: la idea")
+    r = sh(["make", "check"], p)
+    caso("make check pasa con test y lint sin definir, y lo avisa", r.returncode == 0 and "'lint' sin definir" in r.stdout, r.stdout + r.stderr)
+    caso("make run sin definir sigue fallando", sh(["make", "run"], p).returncode != 0)
+    remoto = base / "remoto-primer-push.git"
+    sh(["git", "init", "-q", "--bare", str(remoto)], base)
+    sh(["git", "remote", "add", "origin", str(remoto)], p)
+    r = sh(["git", "push", "-q", "origin", "main"], p)
+    caso("el primer push con solo documentos sale", r.returncode == 0, r.stderr)
+
+    bin_dir = base / "bin-primer-push"
+    bin_dir.mkdir()
+    (bin_dir / "opencode").write_text(OPENCODE_FALSO)
+    (bin_dir / "opencode").chmod(0o755)
+    env = {"PATH": f"{bin_dir}:{os.environ['PATH']}", "OC_VERSION": "2", "OC_AHORA": str(int(time.time() * 1000) + 60_000)}
+    sh(["git", "checkout", "-q", "-b", "feat/base-minima"], p)
+    (p / "docs/producto/roadmap.md").write_text("# Roadmap\n\n1. Base mínima\n")
+    sh(["git", "add", "-A"], p)
+    commit(p, "docs: roadmap")
+    r = sh([sys.executable, ".bowser/verificar.py", "--ci", "--base", "main"], p, env)
+    caso("una rama sin código solo avisa que faltan test y lint", r.returncode == 0 and "sin definir" in r.stdout, r.stdout)
+    (p / "main.go").write_text("package main\n")
+    (p / "main_test.go").write_text("package main\n")
+    sh(["git", "add", "-A"], p)
+    commit(p, "feat: base mínima")
+    r = sh([sys.executable, ".bowser/verificar.py", "--ci", "--base", "main"], p, env)
+    caso("una rama con código no se cierra con test y lint sin definir",
+         r.returncode != 0 and "'test' y 'lint' siguen sin definir" in r.stdout, r.stdout)
+    mk = (p / "Makefile").read_text()
+    mk = mk.replace("\t@echo \"⚠ 'test' sin definir en el Makefile (por ejemplo: go test ./... o npm test).\"", "\t@true")
+    mk = mk.replace("\t@echo \"⚠ 'lint' sin definir en el Makefile (por ejemplo: gofmt -l . o npm run lint).\"", "\t@true")
+    (p / "Makefile").write_text(mk)
+    sh(["git", "add", "-A"], p)
+    commit(p, "build: define test y lint")
+    r = sh([sys.executable, ".bowser/verificar.py", "--ci", "--base", "main"], p, env)
+    caso("con test y lint definidos, la rama con código se cierra", r.returncode == 0 and "sin definir" not in r.stdout, r.stdout)
+
+    # Un proyecto instalado con la plantilla anterior (test y lint con exit 1) recibe la nueva al actualizar.
+    v = proyecto(base, "plantilla-vieja")
+    instalar(v)
+    viejo = (KIT / "pruebas/datos/Makefile-0.13.0").read_text(encoding="utf-8")
+    (v / "Makefile").write_bytes(viejo.replace("\n", "\r\n").encode())
+    r = instalar(v)
+    caso("al actualizar, la plantilla vieja sin tocar se reemplaza", "actualizado  Makefile" in r.stdout
+         and (v / "Makefile").read_text() == (PLANTILLA / "Makefile.plantilla").read_text(), r.stdout)
+    propio = viejo.replace("go test ./... o npm test).\" && exit 1", "x).\" && exit 1")
+    (v / "Makefile").write_text(propio)
+    r = instalar(v)
+    caso("un Makefile que el proyecto cambió no se toca", (v / "Makefile").read_text() == propio and "actualizado  Makefile" not in r.stdout, r.stdout)
+
+
 def prueba_verificacion(base: Path) -> None:
     print("Verificación de la rama (make verify, pre-push y CI)")
     p = proyecto(base, "verificar-rama")
@@ -587,6 +644,7 @@ def main() -> int:
         prueba_hooks(base)
         prueba_costo(base)
         prueba_verificacion(base)
+        prueba_primer_push(base)
         prueba_distribucion(base)
         prueba_workflow(base)
         prueba_wiki(base)

@@ -2,6 +2,15 @@
 
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: [SemVer](https://semver.org/lang/es/).
 
+## [0.13.1] - 2026-10-24
+
+### Corregido
+- **El primer push de un proyecto nuevo ya no se bloquea.** La plantilla del `Makefile` traía `test` y `lint` con `exit 1` hasta definirlos, así que el hook `pre-push` (y el CI) detenían el push de un proyecto que todavía es solo documentos, como el que deja `/bowser-idea`, aunque definirlos es justo la #1 del roadmap. Ahora, sin definir, avisan («⚠ 'lint' sin definir en el Makefile») y pasan. `run` sigue fallando sin definir.
+- **La exigencia pasa a `make verify`**: una rama que trae código no se puede cerrar mientras `test` o `lint` sigan sin definir. Una rama de solo documentos lo avisa. También lo comprueba el CI en cada pull request.
+
+### Al actualizar
+- Si tu `Makefile` es la plantilla anterior sin tocar, `bowser update` lo reemplaza por la nueva. Si ya lo cambiaste, no se toca.
+
 ## [0.13.0] - 2026-10-19
 
 ### Agregado

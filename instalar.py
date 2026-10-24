@@ -85,6 +85,9 @@ def fuente(rel: str) -> Path:
 
 GITIGNORE = ["# bowser-ai-lite: secretos", ".env", ".env.*", "!.env.example", ".bowser/respaldo/"]
 INCLUDE = "-include bowser.mk"
+# Makefiles de la plantilla de versiones anteriores, sin tocar. Un proyecto que lo tiene así no lo hizo suyo todavía,
+# y se le pone la plantilla nueva. Hasta 0.13.0, test y lint fallaban sin definir y bloqueaban el primer push.
+MAKEFILES_VIEJOS = {"5bf943767b4ce486417d86e6e08b9a8d471a5ff10ed2dbe83599990753ec6dec"}
 EJECUTABLES = (".githooks/", ".bowser/costo.py", ".bowser/verificar.py")
 
 
@@ -254,6 +257,12 @@ def main() -> int:
 
     # El Makefile del proyecto incluye bowser.mk (el de la semilla ya lo trae).
     makefile = destino / "Makefile"
+    if makefile.exists() and "semilla      Makefile" not in cambios:
+        normalizado = makefile.read_bytes().replace(b"\r\n", b"\n")
+        if hashlib.sha256(normalizado).hexdigest() in MAKEFILES_VIEJOS:
+            cambios.append("actualizado  Makefile (era la plantilla sin tocar: test y lint ya no bloquean el push sin definir)")
+            if escribir:
+                shutil.copyfile(fuente("Makefile"), makefile)
     if makefile.exists():
         texto = makefile.read_text(encoding="utf-8")
         if INCLUDE not in texto:
