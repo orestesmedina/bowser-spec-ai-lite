@@ -25,7 +25,7 @@ Están en `.githooks/` y el instalador los activa (`git config core.hooksPath .g
 
 **commit-msg**: el mensaje empieza con un tipo de [Conventional Commits](https://www.conventionalcommits.org/es/): `feat`, `fix`, `test`, `docs`, `refactor`, `chore`, `ci`, `perf`, `build`, `style` o `revert`, con ámbito opcional: `feat(citas): reserva desde el celular`. Se aceptan los merges y reverts que genera git.
 
-**pre-push**: corre `make check`. Si el `Makefile` no tiene `check`, o falla, el push no sale.
+**pre-push**: corre `make check`. Si el `Makefile` no tiene `check`, o falla, el push no sale. Con `test` y `lint` todavía sin definir (como vienen en la plantilla), `make check` avisa y pasa: un proyecto que es solo documentos se puede subir.
 
 ## make verify
 
@@ -34,6 +34,7 @@ Dice si la rama actual se puede cerrar. Lo corren `/bowser-feature` al entregar 
 | Comprueba | Falla si… | Cómo se resuelve |
 |---|---|---|
 | `make check` | Falla | Arreglar lo que falla |
+| Comandos del `Makefile` | La rama cambia código y `test` o `lint` siguen sin definir (sin código, solo avisa). También en el CI | Definirlos con los comandos reales del proyecto |
 | Pruebas | La rama cambia código y ningún archivo de pruebas | Agregar la prueba. Si de verdad no aplica, un commit con la línea `Sin-pruebas: <motivo>` (queda como aviso, a la vista del revisor) |
 | Tamaño | Toca un archivo riesgoso y no hay plan en `docs/cambios/<nombre>.md` (la rama sin `feat/` o `fix/`) que diga «Tamaño: grande», commiteado **antes** del primer cambio riesgoso | Escribir el plan grande y aprobarlo. Si ya se programó, rehacer la rama con el plan primero |
 | Revisión | El agente revisor no revisó la rama (lo busca en las sesiones de OpenCode desde que empezó la rama) | `/bowser-review`. Si hubo cambios de código después de la última revisión, solo avisa |
@@ -49,7 +50,7 @@ git commit -m "chore: sube el límite de memoria del contenedor" -m "Sin-pruebas
 |---|---|
 | `--base origin/develop` | Comparar contra otra rama |
 | `--sin-check` | No correr `make check` (si lo acabas de correr) |
-| `--ci` | Lo que usa el CI: sin `make check`, sin revisión ni memoria (no hay sesiones de OpenCode) |
+| `--ci` | Lo que usa el CI: sin `make check`, sin revisión ni memoria (no hay sesiones de OpenCode). Sí comprueba que `test` y `lint` estén definidos si la rama trae código |
 
 ## El CI
 

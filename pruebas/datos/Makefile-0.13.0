@@ -1,0 +1,26 @@
+# Comandos del proyecto. Este archivo es del proyecto: cámbialo. Los agentes usan estos nombres.
+-include bowser.mk
+
+.PHONY: run test lint check help
+
+## run: levanta el proyecto en local
+run:
+	@echo "Define 'run' en el Makefile (por ejemplo: docker compose up -d)." && exit 1
+
+## test: corre todas las pruebas
+test:
+	@echo "Define 'test' en el Makefile (por ejemplo: go test ./... o npm test)." && exit 1
+
+## lint: formato y revisión estática
+lint:
+	@echo "Define 'lint' en el Makefile (por ejemplo: gofmt -l . o npm run lint)." && exit 1
+
+## check: todo lo que debe pasar antes de entregar (lo corren el CI y el hook antes de cada push)
+check: lint test
+
+# ci-setup: lo que el CI debe preparar antes de `make check` (dependencias, servicios). Opcional.
+# ci-setup:
+# 	npm ci
+
+help:
+	@grep -hE '^## ' $(MAKEFILE_LIST) | sed 's/^## /  make /'

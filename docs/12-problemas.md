@@ -60,7 +60,11 @@ Intentaste cambiar un archivo que figura en `.bowser/inmutables` (por ejemplo, u
 
 ### "El Makefile no tiene el objetivo 'check'" o "Push detenido: make check falla"
 
-El hook `pre-push` corre `make check` antes de subir. Define `run`, `test` y `lint` en el `Makefile` (al principio fallan a propósito con "Define 'test' en el Makefile") o arregla lo que falla.
+El hook `pre-push` corre `make check` antes de subir. Arregla lo que falla. Si dice "Define 'test' en el Makefile" o "Define 'lint' en el Makefile", tu `Makefile` viene de la plantilla de la versión 0.13.0 o anterior, que bloqueaba el push hasta definirlos aunque el proyecto no tuviera código: `bowser update` lo cambia por la plantilla nueva si no lo habías tocado, o defínelos tú.
+
+### "'test' y 'lint' siguen sin definir en el Makefile"
+
+`make verify` no deja cerrar una rama que trae código mientras `test` o `lint` sean los de la plantilla, porque `make check` no estaría revisando nada. Defínelos con los comandos reales del proyecto (por ejemplo, en la base mínima, la #1 del roadmap).
 
 ### Los hooks no hacen nada
 

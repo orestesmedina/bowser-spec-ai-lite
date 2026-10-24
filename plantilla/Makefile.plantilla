@@ -1,4 +1,6 @@
 # Comandos del proyecto. Este archivo es del proyecto: cámbialo. Los agentes usan estos nombres.
+# Mientras test y lint digan «sin definir», avisan y pasan sin revisar nada: así el proyecto se puede subir antes de
+# tener código. La primera rama que agregue código tiene que definirlos (make verify no la deja cerrar si no).
 -include bowser.mk
 
 .PHONY: run test lint check help
@@ -9,11 +11,11 @@ run:
 
 ## test: corre todas las pruebas
 test:
-	@echo "Define 'test' en el Makefile (por ejemplo: go test ./... o npm test)." && exit 1
+	@echo "⚠ 'test' sin definir en el Makefile (por ejemplo: go test ./... o npm test)."
 
 ## lint: formato y revisión estática
 lint:
-	@echo "Define 'lint' en el Makefile (por ejemplo: gofmt -l . o npm run lint)." && exit 1
+	@echo "⚠ 'lint' sin definir en el Makefile (por ejemplo: gofmt -l . o npm run lint)."
 
 ## check: todo lo que debe pasar antes de entregar (lo corren el CI y el hook antes de cada push)
 check: lint test

@@ -8,9 +8,10 @@ Comprueba, contra la rama principal:
   2. Que si cambió código, también cambiaron pruebas, o algún commit explica por qué no con `Sin-pruebas: <motivo>`.
   3. Que si tocó archivos riesgosos, la rama tiene un plan de tamaño grande, commiteado antes que esos archivos.
   4. Que el agente revisor revisó la rama (leyendo las sesiones de OpenCode). En --ci no se comprueba.
-  5. Avisa si la memoria pudo quedar vieja: la rama tocó algo y no actualizó el archivo de docs/memoria que lo
+  5. Que si cambió código, `test` y `lint` ya están definidos en el Makefile (la plantilla los trae «sin definir»).
+  6. Avisa si la memoria pudo quedar vieja: la rama tocó algo y no actualizó el archivo de docs/memoria que lo
      describe, o creó una carpeta de código nueva sin tocar arquitectura.md. Cuenta lo que aún no se commiteó.
-Los patrones de 2, 3 y 5 están en .bowser/verificacion, que es del proyecto.
+Los patrones de 2, 3 y 6 están en .bowser/verificacion, que es del proyecto.
 """
 from __future__ import annotations
 
@@ -85,6 +86,25 @@ def comprobar_check(inf: Informe) -> None:
     else:
         salida = (r.stdout + r.stderr).strip().splitlines()[-8:]
         inf.mal("make check falla:\n      " + "\n      ".join(salida))
+
+
+SIN_DEFINIR = "sin definir en el Makefile"
+
+
+def comprobar_objetivos(inf: Informe, cfg: dict, archivos: list[str]) -> None:
+    # La plantilla trae test y lint «sin definir»: pasan sin revisar nada para que se pueda subir un proyecto
+    # que todavía es solo documentos. En cuanto la rama trae código, tienen que hacer su trabajo.
+    pendientes = [t for t in ("test", "lint")
+                  if SIN_DEFINIR in subprocess.run(["make", "-n", t], cwd=RAIZ, capture_output=True, text=True).stdout]
+    if not pendientes:
+        return
+    lista = " y ".join(f"'{t}'" for t in pendientes)
+    if any(not coincide(f, cfg["no-codigo"]) for f in archivos):
+        inf.mal(f"la rama trae código y {lista} sigue{'n' if len(pendientes) > 1 else ''} sin definir en el Makefile: "
+                "make check no revisa nada.\n      Defínelos con los comandos reales del proyecto.")
+    else:
+        inf.aviso(f"{lista} sigue{'n' if len(pendientes) > 1 else ''} sin definir en el Makefile; "
+                  "la primera rama con código tiene que definirlos.")
 
 
 def comprobar_pruebas(inf: Informe, cfg: dict, base: str, archivos: list[str]) -> None:
@@ -218,6 +238,7 @@ def main() -> int:
     inf = Informe()
     if not (a.sin_check or a.ci):
         comprobar_check(inf)
+    comprobar_objetivos(inf, cfg, archivos)
     comprobar_pruebas(inf, cfg, punto, archivos)
     comprobar_tamano(inf, cfg, punto, archivos, rama)
     if not a.ci:

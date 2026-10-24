@@ -76,7 +76,7 @@ Hace ingeniería inversa del proyecto en seis pasadas (inventario, módulos, dat
 Si prefieres hacerlo a mano o por partes, esto es lo mínimo antes de la primera funcionalidad:
 
 1. **`AGENTS.md`**: qué es el proyecto, cómo se corre, su estructura y las reglas que no salen del código. Menos de ~100 líneas.
-2. **`Makefile`**: los comandos `run`, `test` y `lint` reales. `check` es lo que debe pasar antes de entregar; lo corren el hook antes de cada push y el CI, así que **hasta que los definas, ni el push ni el CI pasan**. Si el CI necesita preparar algo (dependencias, una base de datos), agrega el objetivo `ci-setup`.
+2. **`Makefile`**: los comandos `run`, `test` y `lint` reales. `check` es lo que debe pasar antes de entregar; lo corren el hook antes de cada push y el CI. Mientras `test` y `lint` estén sin definir, avisan y pasan sin revisar nada, para que puedas subir un proyecto que todavía es solo documentos (la idea, el roadmap). **La primera rama que traiga código tiene que definirlos**: `make verify` no la deja cerrar si no. Si el CI necesita preparar algo (dependencias, una base de datos), agrega el objetivo `ci-setup`.
 3. **`.bowser/inmutables`**: los archivos que no se tocan una vez en git, por ejemplo `backend/migrations/*.sql`. Revisa también `.bowser/verificacion` (ver [Controles](08-controles.md#bowserverificacion)).
 4. **`docs/producto/requerimientos.md`**: empieza con visión, roles y glosario. Los `RF` de lo que ya existe se agregan al tocarlo.
 5. **`docs/memoria/`**: empieza por `trampas.md` y `convenciones.md`. El resto se llena con `/bowser-close` en cada funcionalidad.
